@@ -3,24 +3,48 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { initTheme } from "@/lib/theme";
 import Index from "./pages/Index";
+import Auth from "./pages/Auth";
+import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
+import { DashboardLayout } from "@/components/DashboardLayout";
+import PlaceholderPage from "./pages/PlaceholderPage";
+
+initTheme();
 
 const queryClient = new QueryClient();
 
+const WrappedPlaceholder = () => (
+  <DashboardLayout><PlaceholderPage /></DashboardLayout>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/workouts" element={<WrappedPlaceholder />} />
+            <Route path="/nutrition" element={<WrappedPlaceholder />} />
+            <Route path="/sleep" element={<WrappedPlaceholder />} />
+            <Route path="/water" element={<WrappedPlaceholder />} />
+            <Route path="/mood" element={<WrappedPlaceholder />} />
+            <Route path="/cycle" element={<WrappedPlaceholder />} />
+            <Route path="/goals" element={<WrappedPlaceholder />} />
+            <Route path="/insights" element={<WrappedPlaceholder />} />
+            <Route path="/settings" element={<WrappedPlaceholder />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
