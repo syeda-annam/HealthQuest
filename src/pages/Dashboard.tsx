@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ProgressRing } from "@/components/ProgressRing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Droplets, Moon, Smile, Lightbulb, Target } from "lucide-react";
 import { format } from "date-fns";
 
@@ -20,31 +21,58 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [name, setName] = useState("");
   const [targets, setTargets] = useState<Targets | null>(null);
+  const [waterToday, setWaterToday] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) return;
 
-    supabase.from("profiles").select("name").eq("id", user.id).single()
-      .then(({ data }) => setName(data?.name || ""));
+    const fetchAll = async () => {
+      setLoading(true);
+      const today = format(new Date(), "yyyy-MM-dd");
 
-    supabase.from("targets").select("*").eq("user_id", user.id).single()
-      .then(({ data }) => {
-        if (data) setTargets({
-          calories: data.calories || 2000,
-          protein: data.protein || 120,
-          fat: data.fat || 65,
-          carbs: data.carbs || 250,
-          water: data.water || 2500,
-          sleep: data.sleep || 7.5,
+      const [profileRes, targetRes, waterRes] = await Promise.all([
+        supabase.from("profiles").select("name").eq("id", user.id).single(),
+        supabase.from("targets").select("*").eq("user_id", user.id).single(),
+        supabase.from("water_logs").select("daily_total").eq("user_id", user.id).eq("logged_date", today).single(),
+      ]);
+
+      setName(profileRes.data?.name || "");
+      if (targetRes.data) {
+        setTargets({
+          calories: targetRes.data.calories || 2000,
+          protein: targetRes.data.protein || 120,
+          fat: targetRes.data.fat || 65,
+          carbs: targetRes.data.carbs || 250,
+          water: targetRes.data.water || 2500,
+          sleep: targetRes.data.sleep || 7.5,
         });
-      });
+      }
+      setWaterToday(Number(waterRes.data?.daily_total || 0));
+      setLoading(false);
+    };
+
+    fetchAll();
   }, [user]);
 
   const today = format(new Date(), "EEEE, MMMM d");
 
+  if (loading) {
+    return (
+      <div className="space-y-6 max-w-5xl mx-auto">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-4 w-40" />
+        <Skeleton className="h-40 w-full" />
+        <div className="grid gap-4 md:grid-cols-2">
+          <Skeleton className="h-48" />
+          <Skeleton className="h-48" />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
-      {/* Greeting */}
       <div>
         <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
           Hello, {name || "there"} 👋
@@ -52,11 +80,10 @@ export default function Dashboard() {
         <p className="text-muted-foreground">{today}</p>
       </div>
 
-      {/* Progress Rings */}
       <Card className="border-border bg-card">
         <CardContent className="flex flex-wrap justify-around gap-4 py-6">
           <ProgressRing value={0} max={targets?.calories || 2000} label="Calories" unit="kcal" />
-          <ProgressRing value={0} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
+          <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
           <ProgressRing value={0} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(260, 60%, 55%)" />
           <ProgressRing value={0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
           <ProgressRing value={0} max={10} label="Mood" unit="/10" color="hsl(340, 70%, 55%)" />
@@ -64,7 +91,6 @@ export default function Dashboard() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2">
-        {/* Active Goals */}
         <Card className="border-border bg-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-heading flex items-center gap-2">
@@ -86,7 +112,6 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        {/* AI Insight */}
         <Card className="border-border bg-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-heading flex items-center gap-2">
@@ -105,7 +130,6 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Quick Log */}
       <Card className="border-border bg-card">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-heading">Quick Log</CardTitle>
@@ -123,7 +147,6 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
       <Card className="border-border bg-card">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg font-heading">Recent Activity</CardTitle>
