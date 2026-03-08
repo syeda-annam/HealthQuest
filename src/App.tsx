@@ -11,6 +11,7 @@ import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import Water from "./pages/Water";
 
 initTheme();
 
