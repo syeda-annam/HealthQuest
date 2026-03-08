@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import Water from "./pages/Water";
+import Sleep from "./pages/Sleep";
 
 initTheme();
 
