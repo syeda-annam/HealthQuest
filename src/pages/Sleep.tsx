@@ -152,6 +152,11 @@ export default function Sleep() {
       toast({ title: "Error logging sleep", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Sleep logged 🌙" });
+      setBedtime("");
+      setWakeTime("");
+      setQuality(0);
+      setSelectedTags([]);
+      setNotes("");
       setTodayLogged(true);
       fetchData();
     }
