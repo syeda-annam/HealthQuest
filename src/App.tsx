@@ -38,7 +38,7 @@ const App = () => (
             <Route path="/nutrition" element={<WrappedPlaceholder />} />
             <Route path="/sleep" element={<DashboardLayout><Sleep /></DashboardLayout>} />
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
-            <Route path="/mood" element={<WrappedPlaceholder />} />
+            <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />
             <Route path="/cycle" element={<WrappedPlaceholder />} />
             <Route path="/goals" element={<WrappedPlaceholder />} />
             <Route path="/insights" element={<WrappedPlaceholder />} />
