@@ -20,6 +20,7 @@ interface Targets {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [targets, setTargets] = useState<Targets | null>(null);
   const [waterToday, setWaterToday] = useState(0);
