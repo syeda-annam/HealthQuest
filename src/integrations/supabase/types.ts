@@ -65,6 +65,45 @@ export type Database = {
         }
         Relationships: []
       }
+      sleep_logs: {
+        Row: {
+          bedtime: string | null
+          created_at: string | null
+          duration_hours: number | null
+          id: string
+          logged_date: string
+          notes: string | null
+          quality: number | null
+          tags: string[] | null
+          user_id: string
+          wake_time: string | null
+        }
+        Insert: {
+          bedtime?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          id?: string
+          logged_date?: string
+          notes?: string | null
+          quality?: number | null
+          tags?: string[] | null
+          user_id: string
+          wake_time?: string | null
+        }
+        Update: {
+          bedtime?: string | null
+          created_at?: string | null
+          duration_hours?: number | null
+          id?: string
+          logged_date?: string
+          notes?: string | null
+          quality?: number | null
+          tags?: string[] | null
+          user_id?: string
+          wake_time?: string | null
+        }
+        Relationships: []
+      }
       targets: {
         Row: {
           calories: number | null
