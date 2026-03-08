@@ -34,10 +34,13 @@ export default function Dashboard() {
       setLoading(true);
       const today = format(new Date(), "yyyy-MM-dd");
 
-      const [profileRes, targetRes, waterRes] = await Promise.all([
+      const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
+
+      const [profileRes, targetRes, waterRes, sleepRes] = await Promise.all([
         supabase.from("profiles").select("name").eq("id", user.id).single(),
         supabase.from("targets").select("*").eq("user_id", user.id).single(),
         supabase.from("water_logs").select("daily_total").eq("user_id", user.id).eq("logged_date", today).single(),
+        supabase.from("sleep_logs").select("duration_hours").eq("user_id", user.id).eq("logged_date", today).single(),
       ]);
 
       setName(profileRes.data?.name || "");
