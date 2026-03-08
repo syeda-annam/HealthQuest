@@ -55,6 +55,7 @@ export default function Dashboard() {
         });
       }
       setWaterToday(Number(waterRes.data?.daily_total || 0));
+      setSleepLastNight(Number(sleepRes.data?.duration_hours || 0));
       setLoading(false);
     };
 
