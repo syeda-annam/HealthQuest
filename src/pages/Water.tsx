@@ -65,7 +65,14 @@ export default function Water() {
       .eq("user_id", user.id)
       .eq("logged_date", today)
       .single();
-    setTodayLog(todayData as WaterLog | null);
+    if (todayData) {
+      setTodayLog({
+        ...todayData,
+        entries: (todayData.entries as unknown as WaterEntry[]) || [],
+      } as WaterLog);
+    } else {
+      setTodayLog(null);
+    }
 
     // Fetch last 30 days for chart + streak
     const thirtyDaysAgo = format(subDays(new Date(), 29), "yyyy-MM-dd");
