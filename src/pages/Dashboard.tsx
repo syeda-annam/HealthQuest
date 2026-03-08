@@ -24,6 +24,7 @@ export default function Dashboard() {
   const [name, setName] = useState("");
   const [targets, setTargets] = useState<Targets | null>(null);
   const [waterToday, setWaterToday] = useState(0);
+  const [sleepLastNight, setSleepLastNight] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
