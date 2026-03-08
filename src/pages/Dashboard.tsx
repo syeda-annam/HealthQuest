@@ -137,13 +137,13 @@ export default function Dashboard() {
           <CardTitle className="text-lg font-heading">Quick Log</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => navigate("/water")}>
             <Droplets className="h-4 w-4 text-primary" /> Log Water
           </Button>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => navigate("/mood")}>
             <Smile className="h-4 w-4 text-primary" /> Log Mood
           </Button>
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={() => navigate("/sleep")}>
             <Moon className="h-4 w-4 text-primary" /> Log Sleep
           </Button>
         </CardContent>
