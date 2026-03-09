@@ -17,6 +17,7 @@ import Mood from "./pages/Mood";
 import Nutrition from "./pages/Nutrition";
 import Workouts from "./pages/Workouts";
 import Goals from "./pages/Goals";
+import Cycle from "./pages/Cycle";
 
 initTheme();
 
@@ -42,7 +43,7 @@ const App = () => (
             <Route path="/sleep" element={<DashboardLayout><Sleep /></DashboardLayout>} />
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
             <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />
-            <Route path="/cycle" element={<WrappedPlaceholder />} />
+            <Route path="/cycle" element={<DashboardLayout><Cycle /></DashboardLayout>} />
             <Route path="/goals" element={<DashboardLayout><Goals /></DashboardLayout>} />
             <Route path="/insights" element={<WrappedPlaceholder />} />
             <Route path="/settings" element={<WrappedPlaceholder />} />
