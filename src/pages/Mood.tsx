@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Smile, Settings } from "lucide-react";
 import { format, subDays, eachDayOfInterval } from "date-fns";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import {
   LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell,
