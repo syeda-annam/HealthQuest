@@ -239,7 +239,7 @@ export default function Nutrition() {
       : await supabase.from("nutrition_logs").insert({
           user_id: user.id,
           logged_date: today,
-          meals: updatedMeals as unknown as Record<string, unknown>[],
+          meals: updatedMeals as unknown as Json,
           total_calories: totals.cal,
           total_protein: totals.p,
           total_carbs: totals.c,
