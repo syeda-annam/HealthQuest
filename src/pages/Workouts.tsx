@@ -102,7 +102,7 @@ export default function Workouts() {
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
 
-    allLogs.forEach((log) => {
+    fourWeeksAgoLogs.forEach((log) => {
       const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
       exercisesArr.forEach((ex: Exercise) => {
         if (ex.name) exerciseNamesSet.add(ex.name);
@@ -110,6 +110,13 @@ export default function Workouts() {
           const vol = (ex.sets || []).reduce((sum, s) => sum + (s.reps || 0) * (s.weight || 0), 0);
           muscleVolumes[ex.muscle_group] += vol;
         }
+      });
+    });
+    // Also collect exercise names from ALL logs for PR tracking
+    allLogs.forEach((log) => {
+      const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
+      exercisesArr.forEach((ex: Exercise) => {
+        if (ex.name) exerciseNamesSet.add(ex.name);
       });
     });
 
