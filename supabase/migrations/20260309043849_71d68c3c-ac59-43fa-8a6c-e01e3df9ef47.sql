@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS public.workout_logs_user_date_idx;
