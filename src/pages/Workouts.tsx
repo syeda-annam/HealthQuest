@@ -208,11 +208,11 @@ export default function Workouts() {
 
   const saveTemplate = async () => {
     if (!user || !templateName.trim() || exercises.length === 0) return;
-    const { error } = await supabase.from("workout_templates").insert({
+    const { error } = await supabase.from("workout_templates").insert([{
       user_id: user.id,
       name: templateName.trim(),
       exercises: exercises as unknown as object,
-    });
+    }]);
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
