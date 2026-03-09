@@ -37,6 +37,7 @@ export default function Dashboard() {
   const [moodToday, setMoodToday] = useState(0);
   const [caloriesToday, setCaloriesToday] = useState(0);
   const [workoutToday, setWorkoutToday] = useState(false);
+  const [activeGoals, setActiveGoals] = useState<GoalData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
