@@ -113,7 +113,7 @@ export default function Nutrition() {
 
     // Calorie history (14 days)
     const last14 = format(subDays(new Date(), 13), "yyyy-MM-dd");
-    const historyData = (historyRes.data || []) as NutritionLog[];
+    const historyData = (historyRes.data || []) as unknown as NutritionLog[];
     const calHistory: { date: string; calories: number }[] = [];
     for (let i = 13; i >= 0; i--) {
       const d = format(subDays(new Date(), i), "yyyy-MM-dd");
