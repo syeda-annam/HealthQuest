@@ -77,17 +77,19 @@ export default function Workouts() {
     const monthEnd = format(endOfMonth(new Date()), "yyyy-MM-dd");
     const fourWeeksAgo = format(subWeeks(new Date(), 4), "yyyy-MM-dd");
 
-    const [profileRes, templateRes, logsMonthRes, todayRes, allLogsRes] = await Promise.all([
+    const [profileRes, templateRes, logsMonthRes, allLogsRes] = await Promise.all([
       supabase.from("profiles").select("units").eq("id", user.id).single(),
       supabase.from("workout_templates").select("*").eq("user_id", user.id),
       supabase.from("workout_logs").select("logged_date").eq("user_id", user.id).gte("logged_date", monthStart).lte("logged_date", monthEnd),
-      supabase.from("workout_logs").select("id").eq("user_id", user.id).eq("logged_date", today).limit(1),
-      supabase.from("workout_logs").select("*").eq("user_id", user.id).gte("logged_date", fourWeeksAgo).order("logged_date", { ascending: true }),
+      supabase.from("workout_logs").select("*").eq("user_id", user.id).order("logged_date", { ascending: false }),
     ]);
 
     setUnits(profileRes.data?.units === "imperial" ? "imperial" : "metric");
     setTemplates((templateRes.data as unknown as WorkoutTemplate[]) || []);
-    setTodayLogged((todayRes.data?.length || 0) > 0);
+
+    // All logs for history
+    const allLogs = (allLogsRes.data || []) as unknown as WorkoutLog[];
+    setWorkoutHistory(allLogs);
 
     // Build heatmap
     const monthDays = eachDayOfInterval({ start: startOfMonth(new Date()), end: endOfMonth(new Date()) });
