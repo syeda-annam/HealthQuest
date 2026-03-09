@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      cycle_logs: {
+        Row: {
+          bbt: number | null
+          created_at: string | null
+          flow: string | null
+          id: string
+          is_period_day: boolean
+          logged_date: string
+          symptoms: string[] | null
+          user_id: string
+        }
+        Insert: {
+          bbt?: number | null
+          created_at?: string | null
+          flow?: string | null
+          id?: string
+          is_period_day?: boolean
+          logged_date?: string
+          symptoms?: string[] | null
+          user_id: string
+        }
+        Update: {
+          bbt?: number | null
+          created_at?: string | null
+          flow?: string | null
+          id?: string
+          is_period_day?: boolean
+          logged_date?: string
+          symptoms?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string | null
