@@ -85,7 +85,7 @@ export default function Workouts() {
     ]);
 
     setUnits(profileRes.data?.units === "imperial" ? "imperial" : "metric");
-    setTemplates((templateRes.data as WorkoutTemplate[]) || []);
+    setTemplates((templateRes.data as unknown as WorkoutTemplate[]) || []);
     setTodayLogged((todayRes.data?.length || 0) > 0);
 
     // Build heatmap
@@ -94,7 +94,7 @@ export default function Workouts() {
     setHeatmapData(monthDays.map((d) => ({ date: d, logged: loggedDates.includes(format(d, "yyyy-MM-dd")) })));
 
     // Extract all exercise names and compute radar/PR data
-    const allLogs = (allLogsRes.data || []) as WorkoutLog[];
+    const allLogs = (allLogsRes.data || []) as unknown as WorkoutLog[];
     const exerciseNamesSet = new Set<string>();
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
