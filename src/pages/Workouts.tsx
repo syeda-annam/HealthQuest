@@ -188,7 +188,7 @@ export default function Workouts() {
       user_id: user.id,
       logged_date: today,
       type: workoutType,
-      exercises: logExercises as unknown as object,
+      exercises: JSON.parse(JSON.stringify(logExercises)) as Json,
       total_volume: workoutType === "Strength" ? totalVolume : 0,
       duration: duration ? parseInt(duration) : null,
       notes: notes || null,
