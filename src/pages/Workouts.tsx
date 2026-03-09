@@ -233,7 +233,18 @@ export default function Workouts() {
     }
   };
 
-  const loadTemplate = (templateId: string) => {
+  const deleteWorkout = async (id: string) => {
+    if (!user) return;
+    const { error } = await supabase.from("workout_logs").delete().eq("id", id).eq("user_id", user.id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Workout deleted" });
+      fetchData();
+    }
+  };
+
+
     const tpl = templates.find((t) => t.id === templateId);
     if (tpl) {
       setExercises(tpl.exercises.map((ex) => ({ ...ex, sets: ex.sets.map((s) => ({ ...s })) })));
