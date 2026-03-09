@@ -76,6 +76,7 @@ export default function Dashboard() {
       setMoodToday(Number(moodRes.data?.mood || 0));
       setCaloriesToday(Number(nutritionRes.data?.total_calories || 0));
       setWorkoutToday((workoutRes.data?.length || 0) > 0);
+      setActiveGoals((goalsRes.data as unknown as GoalData[]) || []);
       setLoading(false);
     };
 
