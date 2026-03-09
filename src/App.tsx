@@ -18,6 +18,7 @@ import Nutrition from "./pages/Nutrition";
 import Workouts from "./pages/Workouts";
 import Goals from "./pages/Goals";
 import Cycle from "./pages/Cycle";
+import Insights from "./pages/Insights";
 
 initTheme();
 
