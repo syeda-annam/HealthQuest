@@ -14,6 +14,7 @@ import PlaceholderPage from "./pages/PlaceholderPage";
 import Water from "./pages/Water";
 import Sleep from "./pages/Sleep";
 import Mood from "./pages/Mood";
+import Nutrition from "./pages/Nutrition";
 
 initTheme();
 
@@ -35,7 +36,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/workouts" element={<WrappedPlaceholder />} />
-            <Route path="/nutrition" element={<WrappedPlaceholder />} />
+            <Route path="/nutrition" element={<DashboardLayout><Nutrition /></DashboardLayout>} />
             <Route path="/sleep" element={<DashboardLayout><Sleep /></DashboardLayout>} />
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
             <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />

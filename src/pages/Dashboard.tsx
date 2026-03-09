@@ -26,6 +26,7 @@ export default function Dashboard() {
   const [waterToday, setWaterToday] = useState(0);
   const [sleepLastNight, setSleepLastNight] = useState(0);
   const [moodToday, setMoodToday] = useState(0);
+  const [caloriesToday, setCaloriesToday] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -37,12 +38,13 @@ export default function Dashboard() {
 
       const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
 
-      const [profileRes, targetRes, waterRes, sleepRes, moodRes] = await Promise.all([
+      const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes] = await Promise.all([
         supabase.from("profiles").select("name").eq("id", user.id).single(),
         supabase.from("targets").select("*").eq("user_id", user.id).single(),
         supabase.from("water_logs").select("daily_total").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("sleep_logs").select("duration_hours").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("mood_logs").select("mood").eq("user_id", user.id).eq("logged_date", today).single(),
+        supabase.from("nutrition_logs").select("total_calories").eq("user_id", user.id).eq("logged_date", today).single(),
       ]);
 
       setName(profileRes.data?.name || "");
@@ -59,6 +61,7 @@ export default function Dashboard() {
       setWaterToday(Number(waterRes.data?.daily_total || 0));
       setSleepLastNight(Number(sleepRes.data?.duration_hours || 0));
       setMoodToday(Number(moodRes.data?.mood || 0));
+      setCaloriesToday(Number(nutritionRes.data?.total_calories || 0));
       setLoading(false);
     };
 
@@ -92,7 +95,7 @@ export default function Dashboard() {
 
       <Card className="border-border bg-card">
         <CardContent className="flex flex-wrap justify-around gap-4 py-6">
-          <ProgressRing value={0} max={targets?.calories || 2000} label="Calories" unit="kcal" />
+          <ProgressRing value={caloriesToday} max={targets?.calories || 2000} label="Calories" unit="kcal" />
           <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
           <ProgressRing value={sleepLastNight} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(260, 60%, 55%)" />
           <ProgressRing value={0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
