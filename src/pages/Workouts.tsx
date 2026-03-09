@@ -211,7 +211,7 @@ export default function Workouts() {
     const { error } = await supabase.from("workout_templates").insert({
       user_id: user.id,
       name: templateName.trim(),
-      exercises,
+      exercises: exercises as unknown as object,
     });
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
