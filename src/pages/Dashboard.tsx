@@ -101,7 +101,7 @@ export default function Dashboard() {
           <ProgressRing value={caloriesToday} max={targets?.calories || 2000} label="Calories" unit="kcal" />
           <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
           <ProgressRing value={sleepLastNight} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(260, 60%, 55%)" />
-          <ProgressRing value={0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
+          <ProgressRing value={workoutToday ? 1 : 0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
           <ProgressRing value={moodToday} max={5} label="Mood" unit="/5" color="hsl(340, 70%, 55%)" />
         </CardContent>
       </Card>
