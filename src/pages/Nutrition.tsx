@@ -263,6 +263,7 @@ export default function Nutrition() {
     setPer100({ cal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
     setManualEntry(false);
     toast({ title: "Added!", description: `${foodName} logged to ${mealType}.` });
+    updateGoalsForModule(user.id, "Nutrition");
     fetchData();
   };
 

@@ -208,6 +208,7 @@ export default function Workouts() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Workout logged!" });
+      updateGoalsForModule(user.id, "Workout");
       setExercises([]);
       setDuration("");
       setDistance("");

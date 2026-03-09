@@ -18,6 +18,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 interface WaterEntry {
   amount_ml: number;

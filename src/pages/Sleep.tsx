@@ -13,6 +13,7 @@ import {
   ReferenceLine, ResponsiveContainer, Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 const DISRUPTOR_TAGS = ["stress", "caffeine", "screens", "late meal", "exercise", "alcohol"];
 
