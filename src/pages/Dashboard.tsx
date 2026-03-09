@@ -49,7 +49,7 @@ export default function Dashboard() {
 
       const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
 
-      const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes, workoutRes] = await Promise.all([
+      const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes, workoutRes, goalsRes] = await Promise.all([
         supabase.from("profiles").select("name").eq("id", user.id).single(),
         supabase.from("targets").select("*").eq("user_id", user.id).single(),
         supabase.from("water_logs").select("daily_total").eq("user_id", user.id).eq("logged_date", today).single(),
@@ -57,6 +57,7 @@ export default function Dashboard() {
         supabase.from("mood_logs").select("mood").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("nutrition_logs").select("total_calories").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("workout_logs").select("id").eq("user_id", user.id).eq("logged_date", today).limit(1),
+        supabase.from("goals").select("id, title, module, target_value, current_value, target_date").eq("user_id", user.id).eq("status", "active").limit(3),
       ]);
 
       setName(profileRes.data?.name || "");
