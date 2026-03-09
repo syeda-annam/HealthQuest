@@ -16,6 +16,7 @@ import Sleep from "./pages/Sleep";
 import Mood from "./pages/Mood";
 import Nutrition from "./pages/Nutrition";
 import Workouts from "./pages/Workouts";
+import Goals from "./pages/Goals";
 
 initTheme();
 
