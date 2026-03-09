@@ -230,7 +230,7 @@ export default function Nutrition() {
 
     const { error } = todayLog
       ? await supabase.from("nutrition_logs").update({
-          meals: updatedMeals as unknown as Record<string, unknown>[],
+          meals: updatedMeals as unknown as Json,
           total_calories: totals.cal,
           total_protein: totals.p,
           total_carbs: totals.c,
