@@ -140,6 +140,7 @@ export default function Mood() {
       toast({ title: "Error logging mood", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Mood logged ✨" });
+      if (user) updateGoalsForModule(user.id, "Mood");
       setMood(0);
       setStress(5);
       setJournal("");
