@@ -69,6 +69,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </main>
         </div>
         <MobileNav moduleCycle={moduleCycle} moduleMood={moduleMood} />
+        <AIChatDrawer />
       </div>
     </SidebarProvider>
   );
