@@ -96,8 +96,8 @@ export default function Workouts() {
     const loggedDates = (logsMonthRes.data || []).map((l) => l.logged_date);
     setHeatmapData(monthDays.map((d) => ({ date: d, logged: loggedDates.includes(format(d, "yyyy-MM-dd")) })));
 
-    // Extract all exercise names and compute radar/PR data
-    const allLogs = (allLogsRes.data || []) as unknown as WorkoutLog[];
+    // Extract all exercise names and compute radar/PR data from recent logs
+    const fourWeeksAgoLogs = allLogs.filter(l => l.logged_date >= fourWeeksAgo);
     const exerciseNamesSet = new Set<string>();
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
