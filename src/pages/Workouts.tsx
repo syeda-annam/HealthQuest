@@ -244,7 +244,7 @@ export default function Workouts() {
     }
   };
 
-
+  const loadTemplate = (templateId: string) => {
     const tpl = templates.find((t) => t.id === templateId);
     if (tpl) {
       setExercises(tpl.exercises.map((ex) => ({ ...ex, sets: ex.sets.map((s) => ({ ...s })) })));
