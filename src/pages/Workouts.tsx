@@ -59,8 +59,8 @@ export default function Workouts() {
   const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [templateName, setTemplateName] = useState("");
-  const [todayLogged, setTodayLogged] = useState(false);
   const [units, setUnits] = useState<"metric" | "imperial">("metric");
+  const [workoutHistory, setWorkoutHistory] = useState<WorkoutLog[]>([]);
 
   // Chart data
   const [heatmapData, setHeatmapData] = useState<{ date: Date; logged: boolean }[]>([]);
