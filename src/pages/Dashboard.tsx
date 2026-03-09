@@ -26,6 +26,7 @@ export default function Dashboard() {
   const [waterToday, setWaterToday] = useState(0);
   const [sleepLastNight, setSleepLastNight] = useState(0);
   const [moodToday, setMoodToday] = useState(0);
+  const [caloriesToday, setCaloriesToday] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
