@@ -36,7 +36,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/workouts" element={<WrappedPlaceholder />} />
-            <Route path="/nutrition" element={<WrappedPlaceholder />} />
+            <Route path="/nutrition" element={<DashboardLayout><Nutrition /></DashboardLayout>} />
             <Route path="/sleep" element={<DashboardLayout><Sleep /></DashboardLayout>} />
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
             <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />
