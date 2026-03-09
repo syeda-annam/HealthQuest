@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
 import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, subWeeks } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Sports", "Custom"];
