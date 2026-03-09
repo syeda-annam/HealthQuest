@@ -18,6 +18,15 @@ interface Targets {
   sleep: number;
 }
 
+interface GoalData {
+  id: string;
+  title: string;
+  module: string;
+  target_value: number;
+  current_value: number;
+  target_date: string | null;
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
