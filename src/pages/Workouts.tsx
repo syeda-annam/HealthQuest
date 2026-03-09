@@ -13,6 +13,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { toast } from "@/hooks/use-toast";
 import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Sports", "Custom"];
@@ -207,6 +208,7 @@ export default function Workouts() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Workout logged!" });
+      updateGoalsForModule(user.id, "Workout");
       setExercises([]);
       setDuration("");
       setDistance("");

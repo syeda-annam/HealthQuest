@@ -9,6 +9,7 @@ import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Smile, Settings } from "lucide-react";
 import { format, subDays, eachDayOfInterval } from "date-fns";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import {
   LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell,
@@ -139,6 +140,7 @@ export default function Mood() {
       toast({ title: "Error logging mood", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Mood logged ✨" });
+      if (user) updateGoalsForModule(user.id, "Mood");
       setMood(0);
       setStress(5);
       setJournal("");

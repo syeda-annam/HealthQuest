@@ -18,6 +18,7 @@ import {
   Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 interface WaterEntry {
   amount_ml: number;
@@ -155,6 +156,7 @@ export default function Water() {
         toast({ title: `+${amount}ml added 💧` });
       }
     }
+    if (user) updateGoalsForModule(user.id, "Water");
     fetchData();
   };
 

@@ -13,6 +13,7 @@ import {
   ReferenceLine, ResponsiveContainer, Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 const DISRUPTOR_TAGS = ["stress", "caffeine", "screens", "late meal", "exercise", "alcohol"];
 
@@ -152,6 +153,7 @@ export default function Sleep() {
       toast({ title: "Error logging sleep", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Sleep logged 🌙" });
+      updateGoalsForModule(user.id, "Sleep");
       setBedtime("");
       setWakeTime("");
       setQuality(0);

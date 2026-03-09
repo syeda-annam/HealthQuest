@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
+import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, BarChart, Bar, ReferenceLine, Legend
@@ -262,6 +263,7 @@ export default function Nutrition() {
     setPer100({ cal: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 });
     setManualEntry(false);
     toast({ title: "Added!", description: `${foodName} logged to ${mealType}.` });
+    updateGoalsForModule(user.id, "Nutrition");
     fetchData();
   };
 
