@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [sleepLastNight, setSleepLastNight] = useState(0);
   const [moodToday, setMoodToday] = useState(0);
   const [caloriesToday, setCaloriesToday] = useState(0);
+  const [workoutToday, setWorkoutToday] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
