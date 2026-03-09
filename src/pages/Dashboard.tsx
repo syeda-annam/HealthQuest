@@ -127,16 +127,35 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="rounded-lg border border-border p-3 space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">No goal set yet</span>
-                </div>
-                <div className="h-2 w-full rounded-full bg-muted">
-                  <div className="h-2 rounded-full bg-primary/30" style={{ width: "0%" }} />
-                </div>
+            {activeGoals.length === 0 ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-muted-foreground">No active goals yet.</p>
+                <Button variant="link" className="text-sm" onClick={() => navigate("/goals")}>
+                  Create a goal →
+                </Button>
               </div>
-            ))}
+            ) : (
+              activeGoals.map((goal) => {
+                const pct = goal.target_value > 0 ? Math.min(Math.round((goal.current_value / goal.target_value) * 100), 100) : 0;
+                const daysLeft = goal.target_date ? differenceInDays(new Date(goal.target_date), new Date()) : null;
+                return (
+                  <div key={goal.id} className="rounded-lg border border-border p-3 space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-medium text-foreground truncate">{goal.title}</span>
+                      <span className="text-xs text-muted-foreground">{pct}%</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-muted">
+                      <div className="h-2 rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+                    </div>
+                    {daysLeft !== null && (
+                      <p className={`text-xs ${daysLeft < 0 ? "text-destructive" : "text-muted-foreground"}`}>
+                        {daysLeft < 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
+                      </p>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </CardContent>
         </Card>
 
