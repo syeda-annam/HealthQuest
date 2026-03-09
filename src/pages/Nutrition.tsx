@@ -404,21 +404,23 @@ export default function Nutrition() {
               </div>
               {searchResults.length > 0 && (
                 <div className="border border-border rounded-lg max-h-60 overflow-y-auto divide-y divide-border">
-                  {searchResults.map((food, i) => {
-                    const n = food.nutriments;
-                    return (
-                      <button
-                        key={i}
-                        className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors"
-                        onClick={() => selectFood(food)}
-                      >
-                        <p className="text-sm font-medium text-foreground truncate">{food.product_name || "Unknown"}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {Math.round(n["energy-kcal_100g"] || 0)} kcal · P {Math.round(n.proteins_100g || 0)}g · C {Math.round(n.carbohydrates_100g || 0)}g · F {Math.round(n.fat_100g || 0)}g per 100g
-                        </p>
-                      </button>
-                    );
-                  })}
+                  {searchResults
+                    .filter((food) => food.nutriments && food.product_name)
+                    .map((food, i) => {
+                      const n = food.nutriments;
+                      return (
+                        <button
+                          key={i}
+                          className="w-full text-left px-3 py-2.5 hover:bg-accent/50 transition-colors"
+                          onClick={() => selectFood(food)}
+                        >
+                          <p className="text-sm font-medium text-foreground truncate">{food.product_name}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {Math.round(n["energy-kcal_100g"] || 0)} kcal · P {Math.round(n.proteins_100g || 0)}g · C {Math.round(n.carbohydrates_100g || 0)}g · F {Math.round(n.fat_100g || 0)}g per 100g
+                          </p>
+                        </button>
+                      );
+                    })}
                 </div>
               )}
             </div>
