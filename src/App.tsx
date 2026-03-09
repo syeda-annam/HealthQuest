@@ -46,7 +46,7 @@ const App = () => (
             <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />
             <Route path="/cycle" element={<DashboardLayout><Cycle /></DashboardLayout>} />
             <Route path="/goals" element={<DashboardLayout><Goals /></DashboardLayout>} />
-            <Route path="/insights" element={<WrappedPlaceholder />} />
+            <Route path="/insights" element={<DashboardLayout><Insights /></DashboardLayout>} />
             <Route path="/settings" element={<WrappedPlaceholder />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
