@@ -130,8 +130,8 @@ export default function Workouts() {
       if (!data) return;
       const prPoints: { date: string; maxWeight: number }[] = [];
       data.forEach((log) => {
-        const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
-        exercisesArr.forEach((ex: Exercise) => {
+        const exercisesArr = Array.isArray(log.exercises) ? (log.exercises as unknown as Exercise[]) : [];
+        exercisesArr.forEach((ex) => {
           if (ex.name === selectedExercise) {
             const maxW = Math.max(...(ex.sets || []).map((s) => s.weight || 0), 0);
             if (maxW > 0) prPoints.push({ date: log.logged_date, maxWeight: maxW });
