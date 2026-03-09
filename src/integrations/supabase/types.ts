@@ -236,6 +236,66 @@ export type Database = {
         }
         Relationships: []
       }
+      workout_logs: {
+        Row: {
+          created_at: string | null
+          duration: number | null
+          exercises: Json
+          id: string
+          logged_date: string
+          notes: string | null
+          total_volume: number
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration?: number | null
+          exercises?: Json
+          id?: string
+          logged_date?: string
+          notes?: string | null
+          total_volume?: number
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          duration?: number | null
+          exercises?: Json
+          id?: string
+          logged_date?: string
+          notes?: string | null
+          total_volume?: number
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      workout_templates: {
+        Row: {
+          created_at: string | null
+          exercises: Json
+          id: string
+          name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          exercises?: Json
+          id?: string
+          name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          exercises?: Json
+          id?: string
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
