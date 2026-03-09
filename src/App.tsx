@@ -15,6 +15,7 @@ import Water from "./pages/Water";
 import Sleep from "./pages/Sleep";
 import Mood from "./pages/Mood";
 import Nutrition from "./pages/Nutrition";
+import Workouts from "./pages/Workouts";
 
 initTheme();
 
@@ -35,7 +36,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/workouts" element={<WrappedPlaceholder />} />
+            <Route path="/workouts" element={<DashboardLayout><Workouts /></DashboardLayout>} />
             <Route path="/nutrition" element={<DashboardLayout><Nutrition /></DashboardLayout>} />
             <Route path="/sleep" element={<DashboardLayout><Sleep /></DashboardLayout>} />
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
