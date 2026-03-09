@@ -59,8 +59,8 @@ export default function Workouts() {
   const [templates, setTemplates] = useState<WorkoutTemplate[]>([]);
   const [templateModalOpen, setTemplateModalOpen] = useState(false);
   const [templateName, setTemplateName] = useState("");
-  const [todayLogged, setTodayLogged] = useState(false);
   const [units, setUnits] = useState<"metric" | "imperial">("metric");
+  const [workoutHistory, setWorkoutHistory] = useState<WorkoutLog[]>([]);
 
   // Chart data
   const [heatmapData, setHeatmapData] = useState<{ date: Date; logged: boolean }[]>([]);
@@ -77,30 +77,32 @@ export default function Workouts() {
     const monthEnd = format(endOfMonth(new Date()), "yyyy-MM-dd");
     const fourWeeksAgo = format(subWeeks(new Date(), 4), "yyyy-MM-dd");
 
-    const [profileRes, templateRes, logsMonthRes, todayRes, allLogsRes] = await Promise.all([
+    const [profileRes, templateRes, logsMonthRes, allLogsRes] = await Promise.all([
       supabase.from("profiles").select("units").eq("id", user.id).single(),
       supabase.from("workout_templates").select("*").eq("user_id", user.id),
       supabase.from("workout_logs").select("logged_date").eq("user_id", user.id).gte("logged_date", monthStart).lte("logged_date", monthEnd),
-      supabase.from("workout_logs").select("id").eq("user_id", user.id).eq("logged_date", today).limit(1),
-      supabase.from("workout_logs").select("*").eq("user_id", user.id).gte("logged_date", fourWeeksAgo).order("logged_date", { ascending: true }),
+      supabase.from("workout_logs").select("*").eq("user_id", user.id).order("logged_date", { ascending: false }),
     ]);
 
     setUnits(profileRes.data?.units === "imperial" ? "imperial" : "metric");
     setTemplates((templateRes.data as unknown as WorkoutTemplate[]) || []);
-    setTodayLogged((todayRes.data?.length || 0) > 0);
+
+    // All logs for history
+    const allLogs = (allLogsRes.data || []) as unknown as WorkoutLog[];
+    setWorkoutHistory(allLogs);
 
     // Build heatmap
     const monthDays = eachDayOfInterval({ start: startOfMonth(new Date()), end: endOfMonth(new Date()) });
     const loggedDates = (logsMonthRes.data || []).map((l) => l.logged_date);
     setHeatmapData(monthDays.map((d) => ({ date: d, logged: loggedDates.includes(format(d, "yyyy-MM-dd")) })));
 
-    // Extract all exercise names and compute radar/PR data
-    const allLogs = (allLogsRes.data || []) as unknown as WorkoutLog[];
+    // Extract all exercise names and compute radar/PR data from recent logs
+    const fourWeeksAgoLogs = allLogs.filter(l => l.logged_date >= fourWeeksAgo);
     const exerciseNamesSet = new Set<string>();
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
 
-    allLogs.forEach((log) => {
+    fourWeeksAgoLogs.forEach((log) => {
       const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
       exercisesArr.forEach((ex: Exercise) => {
         if (ex.name) exerciseNamesSet.add(ex.name);
@@ -108,6 +110,13 @@ export default function Workouts() {
           const vol = (ex.sets || []).reduce((sum, s) => sum + (s.reps || 0) * (s.weight || 0), 0);
           muscleVolumes[ex.muscle_group] += vol;
         }
+      });
+    });
+    // Also collect exercise names from ALL logs for PR tracking
+    allLogs.forEach((log) => {
+      const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
+      exercisesArr.forEach((ex: Exercise) => {
+        if (ex.name) exerciseNamesSet.add(ex.name);
       });
     });
 
@@ -224,6 +233,17 @@ export default function Workouts() {
     }
   };
 
+  const deleteWorkout = async (id: string) => {
+    if (!user) return;
+    const { error } = await supabase.from("workout_logs").delete().eq("id", id).eq("user_id", user.id);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Workout deleted" });
+      fetchData();
+    }
+  };
+
   const loadTemplate = (templateId: string) => {
     const tpl = templates.find((t) => t.id === templateId);
     if (tpl) {
@@ -250,7 +270,7 @@ export default function Workouts() {
         <h1 className="text-2xl font-heading font-bold flex items-center gap-2">
           <Dumbbell className="h-6 w-6 text-primary" /> Workout Tracker
         </h1>
-        {todayLogged && <span className="text-sm text-primary font-medium">✓ Logged today</span>}
+        {workoutHistory.some(w => w.logged_date === format(new Date(), "yyyy-MM-dd")) && <span className="text-sm text-primary font-medium">✓ Logged today</span>}
       </div>
 
       {/* Log Form */}
@@ -400,6 +420,42 @@ export default function Workouts() {
               </Button>
             )}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Workout History */}
+      <Card className="border-border bg-card">
+        <CardHeader>
+          <CardTitle className="text-lg font-heading">Workout History</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {workoutHistory.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground text-sm">No workouts logged yet.</div>
+          ) : (
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {workoutHistory.slice(0, 20).map((log) => {
+                const logExercises = Array.isArray(log.exercises) ? log.exercises : [];
+                return (
+                  <div key={log.id} className="flex items-center justify-between border border-border rounded-lg p-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">{log.type}</span>
+                        <span className="text-xs text-muted-foreground">{format(new Date(log.logged_date + "T00:00:00"), "MMM d, yyyy")}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {logExercises.length > 0 && logExercises.map(e => e.name).join(", ")}
+                        {log.total_volume > 0 && ` · Vol: ${log.total_volume.toLocaleString()}`}
+                        {log.duration && ` · ${log.duration} min`}
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => deleteWorkout(log.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </CardContent>
       </Card>
 
