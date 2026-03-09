@@ -6,8 +6,8 @@ import { ProgressRing } from "@/components/ProgressRing";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Droplets, Moon, Smile, Lightbulb, Target } from "lucide-react";
-import { format, subDays } from "date-fns";
+import { Droplets, Moon, Smile, Lightbulb, Target, Dumbbell, UtensilsCrossed } from "lucide-react";
+import { format, subDays, differenceInDays } from "date-fns";
 
 interface Targets {
   calories: number;
