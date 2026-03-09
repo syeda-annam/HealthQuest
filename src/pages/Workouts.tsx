@@ -259,7 +259,7 @@ export default function Workouts() {
         <h1 className="text-2xl font-heading font-bold flex items-center gap-2">
           <Dumbbell className="h-6 w-6 text-primary" /> Workout Tracker
         </h1>
-        {todayLogged && <span className="text-sm text-primary font-medium">✓ Logged today</span>}
+        {workoutHistory.some(w => w.logged_date === format(new Date(), "yyyy-MM-dd")) && <span className="text-sm text-primary font-medium">✓ Logged today</span>}
       </div>
 
       {/* Log Form */}
