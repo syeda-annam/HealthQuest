@@ -6,6 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AIChatDrawer } from "@/components/AIChatDrawer";
 import { Activity, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -68,6 +69,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           </main>
         </div>
         <MobileNav moduleCycle={moduleCycle} moduleMood={moduleMood} />
+        <AIChatDrawer />
       </div>
     </SidebarProvider>
   );
