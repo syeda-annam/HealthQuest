@@ -423,6 +423,42 @@ export default function Workouts() {
         </CardContent>
       </Card>
 
+      {/* Workout History */}
+      <Card className="border-border bg-card">
+        <CardHeader>
+          <CardTitle className="text-lg font-heading">Workout History</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {workoutHistory.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground text-sm">No workouts logged yet.</div>
+          ) : (
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {workoutHistory.slice(0, 20).map((log) => {
+                const logExercises = Array.isArray(log.exercises) ? log.exercises : [];
+                return (
+                  <div key={log.id} className="flex items-center justify-between border border-border rounded-lg p-3">
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium text-sm">{log.type}</span>
+                        <span className="text-xs text-muted-foreground">{format(new Date(log.logged_date + "T00:00:00"), "MMM d, yyyy")}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {logExercises.length > 0 && logExercises.map(e => e.name).join(", ")}
+                        {log.total_volume > 0 && ` · Vol: ${log.total_volume.toLocaleString()}`}
+                        {log.duration && ` · ${log.duration} min`}
+                      </div>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={() => deleteWorkout(log.id)}>
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
       {/* Charts */}
       <div className="grid gap-4 md:grid-cols-2">
         {/* Monthly Heatmap */}
