@@ -156,6 +156,7 @@ export default function Water() {
         toast({ title: `+${amount}ml added 💧` });
       }
     }
+    if (user) updateGoalsForModule(user.id, "Water");
     fetchData();
   };
 

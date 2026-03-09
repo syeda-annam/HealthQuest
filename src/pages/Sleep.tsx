@@ -153,6 +153,7 @@ export default function Sleep() {
       toast({ title: "Error logging sleep", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Sleep logged 🌙" });
+      updateGoalsForModule(user.id, "Sleep");
       setBedtime("");
       setWakeTime("");
       setQuality(0);
