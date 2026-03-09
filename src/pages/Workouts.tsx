@@ -183,7 +183,7 @@ export default function Workouts() {
       logExercises = [{ name: "Cardio Session", sets: [], muscle_group: undefined }];
     }
 
-    const { error } = await supabase.from("workout_logs").insert({
+    const { error } = await supabase.from("workout_logs").insert([{
       user_id: user.id,
       logged_date: today,
       type: workoutType,
@@ -191,7 +191,7 @@ export default function Workouts() {
       total_volume: workoutType === "Strength" ? totalVolume : 0,
       duration: duration ? parseInt(duration) : null,
       notes: notes || null,
-    });
+    }]);
 
     if (error) {
       toast({ title: "Error", description: error.message, variant: "destructive" });
