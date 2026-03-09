@@ -95,7 +95,7 @@ export default function Dashboard() {
 
       <Card className="border-border bg-card">
         <CardContent className="flex flex-wrap justify-around gap-4 py-6">
-          <ProgressRing value={0} max={targets?.calories || 2000} label="Calories" unit="kcal" />
+          <ProgressRing value={caloriesToday} max={targets?.calories || 2000} label="Calories" unit="kcal" />
           <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
           <ProgressRing value={sleepLastNight} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(260, 60%, 55%)" />
           <ProgressRing value={0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
