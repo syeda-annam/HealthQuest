@@ -180,9 +180,14 @@ export function AIChatDrawer() {
                 <MessageCircle className="h-5 w-5 text-primary" />
                 <span className="font-heading font-bold text-foreground">HealthQuest AI</span>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                <X className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" onClick={() => { setMessages([]); setLoaded(true); }} aria-label="New Chat">
+                  <SquarePen className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Messages */}
