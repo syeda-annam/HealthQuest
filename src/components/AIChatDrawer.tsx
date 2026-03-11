@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, SquarePen } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 interface ChatMessage {
@@ -35,10 +35,12 @@ export function AIChatDrawer() {
   useEffect(() => {
     if (!open || !user || loaded) return;
     const loadHistory = async () => {
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data } = await supabase
         .from("chat_messages")
         .select("id, role, content")
         .eq("user_id", user.id)
+        .gte("created_at", since)
         .order("created_at", { ascending: true })
         .limit(50);
       if (data) setMessages(data as ChatMessage[]);
@@ -178,9 +180,14 @@ export function AIChatDrawer() {
                 <MessageCircle className="h-5 w-5 text-primary" />
                 <span className="font-heading font-bold text-foreground">HealthQuest AI</span>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-                <X className="h-4 w-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" onClick={() => { setMessages([]); setLoaded(true); }} aria-label="New Chat">
+                  <SquarePen className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Messages */}
