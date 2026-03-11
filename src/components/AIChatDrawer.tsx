@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, SquarePen } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 interface ChatMessage {
