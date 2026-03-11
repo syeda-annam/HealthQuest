@@ -19,14 +19,11 @@ import Workouts from "./pages/Workouts";
 import Goals from "./pages/Goals";
 import Cycle from "./pages/Cycle";
 import Insights from "./pages/Insights";
+import Settings from "./pages/Settings";
 
 initTheme();
 
 const queryClient = new QueryClient();
-
-const WrappedPlaceholder = () => (
-  <DashboardLayout><PlaceholderPage /></DashboardLayout>
-);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
