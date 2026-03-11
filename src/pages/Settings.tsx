@@ -173,12 +173,16 @@ export default function Settings() {
     setSaving(false);
   };
 
+  const { setModuleCycle, setModuleMood } = useProfile();
+
   const toggleModule = async (module: "module_mood" | "module_cycle", value: boolean) => {
     if (!user) return;
     try {
       const { error } = await supabase.from("profiles").update({ [module]: value }).eq("id", user.id);
       if (error) throw error;
       setProfile(prev => ({ ...prev, [module]: value }));
+      if (module === "module_mood") setModuleMood(value);
+      if (module === "module_cycle") setModuleCycle(value);
       toast({ title: `${module === "module_mood" ? "Mental Health" : "Cycle"} Tracking ${value ? "enabled" : "disabled"} ✓` });
     } catch {
       toast({ title: "Something went wrong. Please try again.", variant: "destructive" });
