@@ -1,7 +1,7 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProfile } from "@/contexts/ProfileContext";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
@@ -12,31 +12,21 @@ import { Button } from "@/components/ui/button";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, loading, signOut } = useAuth();
+  const { moduleCycle, moduleMood, profileLoaded, profileComplete } = useProfile();
   const navigate = useNavigate();
-  const [profileLoading, setProfileLoading] = useState(true);
-  const [moduleCycle, setModuleCycle] = useState(false);
-  const [moduleMood, setModuleMood] = useState(false);
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !profileLoaded) return;
     if (!user) {
       navigate("/auth");
       return;
     }
+    if (!profileComplete) {
+      navigate("/onboarding");
+    }
+  }, [user, loading, profileLoaded, profileComplete, navigate]);
 
-    supabase.from("profiles").select("profile_complete, module_cycle, module_mood").eq("id", user.id).single()
-      .then(({ data }) => {
-        if (!data?.profile_complete) {
-          navigate("/onboarding");
-          return;
-        }
-        setModuleCycle(data.module_cycle || false);
-        setModuleMood(data.module_mood || false);
-        setProfileLoading(false);
-      });
-  }, [user, loading, navigate]);
-
-  if (loading || profileLoading) {
+  if (loading || !profileLoaded || !profileComplete) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <Activity className="h-8 w-8 text-primary animate-pulse-ring" />
