@@ -35,10 +35,12 @@ export function AIChatDrawer() {
   useEffect(() => {
     if (!open || !user || loaded) return;
     const loadHistory = async () => {
+      const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
       const { data } = await supabase
         .from("chat_messages")
         .select("id, role, content")
         .eq("user_id", user.id)
+        .gte("created_at", since)
         .order("created_at", { ascending: true })
         .limit(50);
       if (data) setMessages(data as ChatMessage[]);
