@@ -44,7 +44,7 @@ const App = () => (
             <Route path="/cycle" element={<DashboardLayout><Cycle /></DashboardLayout>} />
             <Route path="/goals" element={<DashboardLayout><Goals /></DashboardLayout>} />
             <Route path="/insights" element={<DashboardLayout><Insights /></DashboardLayout>} />
-            <Route path="/settings" element={<WrappedPlaceholder />} />
+            <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
