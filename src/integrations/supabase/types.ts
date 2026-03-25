@@ -194,13 +194,16 @@ export type Database = {
           goal: string | null
           height: number | null
           id: string
+          level: number
           module_cycle: boolean | null
           module_mood: boolean | null
           name: string | null
           profile_complete: boolean | null
+          total_xp_earned: number
           units: string | null
           updated_at: string | null
           weight: number | null
+          xp: number
         }
         Insert: {
           activity_level?: string | null
@@ -210,13 +213,16 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id: string
+          level?: number
           module_cycle?: boolean | null
           module_mood?: boolean | null
           name?: string | null
           profile_complete?: boolean | null
+          total_xp_earned?: number
           units?: string | null
           updated_at?: string | null
           weight?: number | null
+          xp?: number
         }
         Update: {
           activity_level?: string | null
@@ -226,13 +232,16 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id?: string
+          level?: number
           module_cycle?: boolean | null
           module_mood?: boolean | null
           name?: string | null
           profile_complete?: boolean | null
+          total_xp_earned?: number
           units?: string | null
           updated_at?: string | null
           weight?: number | null
+          xp?: number
         }
         Relationships: []
       }
