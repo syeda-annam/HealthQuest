@@ -50,6 +50,7 @@ interface WorkoutTemplate {
 
 export default function Workouts() {
   const { user } = useAuth();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [workoutType, setWorkoutType] = useState("Strength");
   const [exercises, setExercises] = useState<Exercise[]>([]);
