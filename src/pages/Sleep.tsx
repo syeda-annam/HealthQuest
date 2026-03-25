@@ -157,6 +157,9 @@ export default function Sleep() {
     } else {
       toast({ title: "Sleep logged 🌙" });
       updateGoalsForModule(user.id, "Sleep");
+      const sources: XPSource[] = [{ action: "Logged sleep", xp: 5 }];
+      if (duration >= 7) sources.push({ action: "Slept 7+ hours", xp: 10 });
+      awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       setBedtime("");
       setWakeTime("");
       setQuality(0);

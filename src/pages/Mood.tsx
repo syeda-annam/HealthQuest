@@ -40,6 +40,7 @@ export default function Mood() {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [moduleEnabled, setModuleEnabled] = useState<boolean | null>(null);
 
