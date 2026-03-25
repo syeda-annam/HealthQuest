@@ -212,6 +212,7 @@ export default function Workouts() {
     } else {
       toast({ title: "Workout logged!" });
       updateGoalsForModule(user.id, "Workout");
+      awardXP(user.id, [{ action: "Logged workout", xp: 15 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
       setExercises([]);
       setDuration("");
       setDistance("");
