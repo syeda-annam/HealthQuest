@@ -4,14 +4,18 @@ import {
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { XPBar } from "@/components/XPBar";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
 
 interface AppSidebarProps {
   moduleCycle: boolean;
   moduleMood: boolean;
+  level: number;
+  totalXP: number;
+  name: string;
 }
 
 export function AppSidebar({ moduleCycle, moduleMood }: AppSidebarProps) {
