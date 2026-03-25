@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AIChatDrawer } from "@/components/AIChatDrawer";
+import { LevelUpCelebration } from "@/components/LevelUpCelebration";
+import { XPBar } from "@/components/XPBar";
 import { Activity, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
