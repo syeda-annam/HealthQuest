@@ -160,6 +160,9 @@ export default function Water() {
       if (!error && data) {
         setTodayLog(data as unknown as WaterLog);
         toast({ title: `+${amount}ml added 💧` });
+        const sources: XPSource[] = [{ action: "Logged water", xp: 5 }];
+        if (amount >= goal) sources.push({ action: "Hit water goal", xp: 10 });
+        awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       }
     }
     if (user) updateGoalsForModule(user.id, "Water");
