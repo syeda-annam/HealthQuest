@@ -18,7 +18,7 @@ interface AppSidebarProps {
   name: string;
 }
 
-export function AppSidebar({ moduleCycle, moduleMood }: AppSidebarProps) {
+export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
