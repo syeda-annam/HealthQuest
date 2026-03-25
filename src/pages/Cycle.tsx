@@ -165,6 +165,7 @@ export default function Cycle() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Cycle log saved" });
+      awardXP(user.id, [{ action: "Logged cycle", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
       setModalOpen(false);
       fetchData();
     }
