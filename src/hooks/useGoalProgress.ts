@@ -42,6 +42,15 @@ async function checkAndCelebrateMilestones(goal: Goal, newValue: number) {
     milestones: milestones as unknown as Json,
     status: isComplete ? "completed" : "active",
   }).eq("id", goal.id);
+
+  // Award XP for goal completion
+  if (isComplete) {
+    // We need the user_id from the goal context — fetch it
+    const { data: goalData } = await supabase.from("goals").select("user_id").eq("id", goal.id).single();
+    if (goalData) {
+      awardXP(goalData.user_id, [{ action: "Completed a goal", xp: 50 }], (window as any).__healthquest_level_up);
+    }
+  }
 }
 
 function threshold100Reached(pct: number) {
