@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { awardXP } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import { Heart, Settings, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths,
@@ -36,6 +38,7 @@ interface CycleLog {
 export default function Cycle() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [moduleEnabled, setModuleEnabled] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -162,6 +165,7 @@ export default function Cycle() {
       toast({ title: "Error", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Cycle log saved" });
+      awardXP(user.id, [{ action: "Logged cycle", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
       setModalOpen(false);
       fetchData();
     }

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
+import { useProfile } from "@/contexts/ProfileContext";
 import { ProgressRing } from "@/components/ProgressRing";
+import { DashboardXPCard } from "@/components/DashboardXPCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,6 +31,7 @@ interface GoalData {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { level, totalXPEarned } = useProfile();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [targets, setTargets] = useState<Targets | null>(null);
@@ -119,6 +122,7 @@ export default function Dashboard() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <DashboardXPCard level={level} totalXP={totalXPEarned} />
         <Card className="border-border bg-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-heading flex items-center gap-2">

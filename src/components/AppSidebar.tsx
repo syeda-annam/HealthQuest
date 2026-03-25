@@ -4,17 +4,21 @@ import {
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
+import { XPBar } from "@/components/XPBar";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
 
 interface AppSidebarProps {
   moduleCycle: boolean;
   moduleMood: boolean;
+  level: number;
+  totalXP: number;
+  name: string;
 }
 
-export function AppSidebar({ moduleCycle, moduleMood }: AppSidebarProps) {
+export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: AppSidebarProps) {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
@@ -57,6 +61,14 @@ export function AppSidebar({ moduleCycle, moduleMood }: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      {!collapsed && (
+        <SidebarFooter className="p-4 border-t border-border">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-foreground truncate">{name || "Adventurer"}</p>
+            <XPBar level={level} totalXP={totalXP} compact />
+          </div>
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }

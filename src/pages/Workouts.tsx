@@ -14,6 +14,8 @@ import { toast } from "@/hooks/use-toast";
 import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Sports", "Custom"];
@@ -48,6 +50,7 @@ interface WorkoutTemplate {
 
 export default function Workouts() {
   const { user } = useAuth();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [workoutType, setWorkoutType] = useState("Strength");
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -209,6 +212,7 @@ export default function Workouts() {
     } else {
       toast({ title: "Workout logged!" });
       updateGoalsForModule(user.id, "Workout");
+      awardXP(user.id, [{ action: "Logged workout", xp: 15 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
       setExercises([]);
       setDuration("");
       setDistance("");

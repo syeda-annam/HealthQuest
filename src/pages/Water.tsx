@@ -18,6 +18,8 @@ import {
   Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 interface WaterEntry {
@@ -36,6 +38,7 @@ interface WaterLog {
 export default function Water() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [todayLog, setTodayLog] = useState<WaterLog | null>(null);
   const [weekData, setWeekData] = useState<{ day: string; total: number }[]>([]);
@@ -138,6 +141,10 @@ export default function Water() {
       if (!error) {
         setTodayLog({ ...todayLog, entries: updatedEntries, daily_total: newTotal });
         toast({ title: `+${amount}ml added 💧` });
+        // Award XP
+        const sources: XPSource[] = [{ action: "Logged water", xp: 5 }];
+        if (newTotal >= goal) sources.push({ action: "Hit water goal", xp: 10 });
+        awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       }
     } else {
       const { data, error } = await supabase
@@ -154,6 +161,9 @@ export default function Water() {
       if (!error && data) {
         setTodayLog(data as unknown as WaterLog);
         toast({ title: `+${amount}ml added 💧` });
+        const sources: XPSource[] = [{ action: "Logged water", xp: 5 }];
+        if (amount >= goal) sources.push({ action: "Hit water goal", xp: 10 });
+        awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       }
     }
     if (user) updateGoalsForModule(user.id, "Water");

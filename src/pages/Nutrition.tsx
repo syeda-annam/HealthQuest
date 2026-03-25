@@ -13,6 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, BarChart, Bar, ReferenceLine, Legend
@@ -55,6 +57,7 @@ const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snacks"] as const;
 export default function Nutrition() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [todayLog, setTodayLog] = useState<NutritionLog | null>(null);
   const [targets, setTargets] = useState({ calories: 2000, protein: 120, carbs: 250, fat: 65 });
@@ -264,6 +267,12 @@ export default function Nutrition() {
     setManualEntry(false);
     toast({ title: "Added!", description: `${foodName} logged to ${mealType}.` });
     updateGoalsForModule(user.id, "Nutrition");
+    const xpSources: XPSource[] = [{ action: "Logged meal", xp: 5 }];
+    const calTarget = targets.calories;
+    if (totals.cal > 0 && Math.abs(totals.cal - calTarget) / calTarget <= 0.1) {
+      xpSources.push({ action: "Hit calorie target", xp: 10 });
+    }
+    awardXP(user.id, xpSources, (window as any).__healthquest_level_up).then(() => refreshProfile());
     fetchData();
   };
 

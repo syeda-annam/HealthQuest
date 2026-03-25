@@ -14,6 +14,8 @@ import {
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 
 const DISRUPTOR_TAGS = ["stress", "caffeine", "screens", "late meal", "exercise", "alcohol"];
 
@@ -29,6 +31,7 @@ function calcDuration(bedtime: string, wakeTime: string): number {
 export default function Sleep() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [sleepTarget, setSleepTarget] = useState(7.5);
   const [streak, setStreak] = useState(0);
@@ -154,6 +157,9 @@ export default function Sleep() {
     } else {
       toast({ title: "Sleep logged 🌙" });
       updateGoalsForModule(user.id, "Sleep");
+      const sources: XPSource[] = [{ action: "Logged sleep", xp: 5 }];
+      if (duration >= 7) sources.push({ action: "Slept 7+ hours", xp: 10 });
+      awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       setBedtime("");
       setWakeTime("");
       setQuality(0);

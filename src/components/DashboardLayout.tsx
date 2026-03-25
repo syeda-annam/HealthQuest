@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProfile } from "@/contexts/ProfileContext";
 import { useNavigate } from "react-router-dom";
@@ -7,13 +7,22 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { AIChatDrawer } from "@/components/AIChatDrawer";
+import { LevelUpCelebration } from "@/components/LevelUpCelebration";
+import { XPBar } from "@/components/XPBar";
 import { Activity, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, loading, signOut } = useAuth();
-  const { moduleCycle, moduleMood, profileLoaded, profileComplete } = useProfile();
+  const { moduleCycle, moduleMood, profileLoaded, profileComplete, level, totalXPEarned, name } = useProfile();
   const navigate = useNavigate();
+  const [levelUpLevel, setLevelUpLevel] = useState<number | null>(null);
+
+  // Expose level up trigger globally so XP awards from any page can trigger it
+  useEffect(() => {
+    (window as any).__healthquest_level_up = (newLevel: number) => setLevelUpLevel(newLevel);
+    return () => { delete (window as any).__healthquest_level_up; };
+  }, []);
 
   useEffect(() => {
     if (loading || !profileLoaded) return;
@@ -38,7 +47,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
         <div className="hidden md:block">
-          <AppSidebar moduleCycle={moduleCycle} moduleMood={moduleMood} />
+          <AppSidebar moduleCycle={moduleCycle} moduleMood={moduleMood} level={level} totalXP={totalXPEarned} name={name} />
         </div>
         <div className="flex-1 flex flex-col">
           <header className="h-14 flex items-center justify-between border-b border-border px-4">
@@ -47,7 +56,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               <Activity className="h-5 w-5 text-primary md:hidden" />
               <span className="font-heading font-bold text-foreground">HealthQuest</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex w-40">
+                <XPBar level={level} totalXP={totalXPEarned} compact />
+              </div>
               <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
                 <LogOut className="h-4 w-4" />
@@ -60,6 +72,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
         <MobileNav moduleCycle={moduleCycle} moduleMood={moduleMood} />
         <AIChatDrawer />
+        {levelUpLevel !== null && (
+          <LevelUpCelebration level={levelUpLevel} onDismiss={() => setLevelUpLevel(null)} />
+        )}
       </div>
     </SidebarProvider>
   );
