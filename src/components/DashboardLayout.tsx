@@ -56,7 +56,10 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               <Activity className="h-5 w-5 text-primary md:hidden" />
               <span className="font-heading font-bold text-foreground">HealthQuest</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex w-40">
+                <XPBar level={level} totalXP={totalXPEarned} compact />
+              </div>
               <ThemeToggle />
               <Button variant="ghost" size="icon" onClick={signOut} aria-label="Sign out">
                 <LogOut className="h-4 w-4" />
