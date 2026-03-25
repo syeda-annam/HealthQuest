@@ -14,8 +14,15 @@ import { Button } from "@/components/ui/button";
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
   const { user, loading, signOut } = useAuth();
-  const { moduleCycle, moduleMood, profileLoaded, profileComplete } = useProfile();
+  const { moduleCycle, moduleMood, profileLoaded, profileComplete, level, totalXPEarned, name } = useProfile();
   const navigate = useNavigate();
+  const [levelUpLevel, setLevelUpLevel] = useState<number | null>(null);
+
+  // Expose level up trigger globally so XP awards from any page can trigger it
+  useEffect(() => {
+    (window as any).__healthquest_level_up = (newLevel: number) => setLevelUpLevel(newLevel);
+    return () => { delete (window as any).__healthquest_level_up; };
+  }, []);
 
   useEffect(() => {
     if (loading || !profileLoaded) return;
