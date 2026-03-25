@@ -31,6 +31,7 @@ interface GoalData {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { level, totalXPEarned } = useProfile();
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [targets, setTargets] = useState<Targets | null>(null);
