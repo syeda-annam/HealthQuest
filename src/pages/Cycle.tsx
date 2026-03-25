@@ -38,6 +38,7 @@ interface CycleLog {
 export default function Cycle() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [moduleEnabled, setModuleEnabled] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date());
