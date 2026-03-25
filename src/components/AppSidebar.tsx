@@ -61,6 +61,14 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      {!collapsed && (
+        <SidebarFooter className="p-4 border-t border-border">
+          <div className="space-y-1">
+            <p className="text-sm font-medium text-foreground truncate">{name || "Adventurer"}</p>
+            <XPBar level={level} totalXP={totalXP} compact />
+          </div>
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 }
