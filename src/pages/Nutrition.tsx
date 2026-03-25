@@ -57,6 +57,7 @@ const MEAL_TYPES = ["Breakfast", "Lunch", "Dinner", "Snacks"] as const;
 export default function Nutrition() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [todayLog, setTodayLog] = useState<NutritionLog | null>(null);
   const [targets, setTargets] = useState({ calories: 2000, protein: 120, carbs: 250, fat: 65 });
