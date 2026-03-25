@@ -267,6 +267,12 @@ export default function Nutrition() {
     setManualEntry(false);
     toast({ title: "Added!", description: `${foodName} logged to ${mealType}.` });
     updateGoalsForModule(user.id, "Nutrition");
+    const xpSources: XPSource[] = [{ action: "Logged meal", xp: 5 }];
+    const calTarget = targets.calories;
+    if (totals.cal > 0 && Math.abs(totals.cal - calTarget) / calTarget <= 0.1) {
+      xpSources.push({ action: "Hit calorie target", xp: 10 });
+    }
+    awardXP(user.id, xpSources, (window as any).__healthquest_level_up).then(() => refreshProfile());
     fetchData();
   };
 

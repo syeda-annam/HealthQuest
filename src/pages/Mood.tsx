@@ -143,7 +143,10 @@ export default function Mood() {
       toast({ title: "Error logging mood", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Mood logged ✨" });
-      if (user) updateGoalsForModule(user.id, "Mood");
+      if (user) {
+        updateGoalsForModule(user.id, "Mood");
+        awardXP(user.id, [{ action: "Logged mood", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
+      }
       setMood(0);
       setStress(5);
       setJournal("");
