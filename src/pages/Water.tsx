@@ -140,6 +140,10 @@ export default function Water() {
       if (!error) {
         setTodayLog({ ...todayLog, entries: updatedEntries, daily_total: newTotal });
         toast({ title: `+${amount}ml added 💧` });
+        // Award XP
+        const sources: XPSource[] = [{ action: "Logged water", xp: 5 }];
+        if (newTotal >= goal) sources.push({ action: "Hit water goal", xp: 10 });
+        awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       }
     } else {
       const { data, error } = await supabase
