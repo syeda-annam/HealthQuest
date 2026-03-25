@@ -72,6 +72,9 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
         <MobileNav moduleCycle={moduleCycle} moduleMood={moduleMood} />
         <AIChatDrawer />
+        {levelUpLevel !== null && (
+          <LevelUpCelebration level={levelUpLevel} onDismiss={() => setLevelUpLevel(null)} />
+        )}
       </div>
     </SidebarProvider>
   );
