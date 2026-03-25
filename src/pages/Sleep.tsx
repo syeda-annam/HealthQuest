@@ -14,6 +14,8 @@ import {
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 
 const DISRUPTOR_TAGS = ["stress", "caffeine", "screens", "late meal", "exercise", "alcohol"];
 

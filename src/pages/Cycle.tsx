@@ -10,6 +10,8 @@ import { Switch } from "@/components/ui/switch";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
+import { awardXP } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import { Heart, Settings, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths,

@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Smile, Settings } from "lucide-react";
 import { format, subDays, eachDayOfInterval } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import {
   LineChart, Line, BarChart, Bar, ScatterChart, Scatter,
   XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Cell,

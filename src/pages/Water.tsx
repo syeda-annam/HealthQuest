@@ -38,6 +38,7 @@ interface WaterLog {
 export default function Water() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [todayLog, setTodayLog] = useState<WaterLog | null>(null);
   const [weekData, setWeekData] = useState<{ day: string; total: number }[]>([]);

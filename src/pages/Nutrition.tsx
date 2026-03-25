@@ -13,6 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import {
   ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis,
   CartesianGrid, Tooltip, BarChart, Bar, ReferenceLine, Legend
