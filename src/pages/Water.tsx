@@ -18,6 +18,8 @@ import {
   Tooltip,
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
+import { awardXP, XPSource } from "@/hooks/useXP";
+import { useProfile } from "@/contexts/ProfileContext";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 
 interface WaterEntry {
