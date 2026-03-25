@@ -31,6 +31,7 @@ function calcDuration(bedtime: string, wakeTime: string): number {
 export default function Sleep() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { refreshProfile } = useProfile();
   const [loading, setLoading] = useState(true);
   const [sleepTarget, setSleepTarget] = useState(7.5);
   const [streak, setStreak] = useState(0);
