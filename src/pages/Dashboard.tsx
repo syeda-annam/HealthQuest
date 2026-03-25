@@ -122,6 +122,7 @@ export default function Dashboard() {
       </Card>
 
       <div className="grid gap-4 md:grid-cols-2">
+        <DashboardXPCard level={level} totalXP={totalXPEarned} />
         <Card className="border-border bg-card">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg font-heading flex items-center gap-2">
