@@ -289,8 +289,8 @@ export default function Insights() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-          <Lightbulb className="h-6 w-6 text-primary" /> Progress & Insights
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+          <Lightbulb className="h-6 w-6 text-highlight" /> Progress & Insights
         </h1>
         <p className="text-muted-foreground">Cross-module correlations from the last 90 days</p>
       </div>

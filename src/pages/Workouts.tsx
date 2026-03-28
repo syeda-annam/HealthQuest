@@ -273,8 +273,8 @@ export default function Workouts() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-heading font-bold flex items-center gap-2">
-          <Dumbbell className="h-6 w-6 text-primary" /> Workout Tracker
+          <h1 className="text-2xl font-heading font-extrabold flex items-center gap-2">
+            <Dumbbell className="h-6 w-6 text-secondary" /> Workout Tracker
         </h1>
         {workoutHistory.some(w => w.logged_date === format(new Date(), "yyyy-MM-dd")) && <span className="text-sm text-primary font-medium">✓ Logged today</span>}
       </div>

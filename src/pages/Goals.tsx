@@ -155,7 +155,7 @@ export default function Goals() {
         <Card className="border-border bg-card">
           <CardContent className="py-12 text-center">
             <Target className="h-12 w-12 mx-auto text-muted-foreground/30 mb-4" />
-            <p className="text-muted-foreground">No active goals yet. Create one to get started!</p>
+            <p className="text-muted-foreground">No active goals yet. Set your first goal and give your tracking purpose!</p>
           </CardContent>
         </Card>
       ) : (
