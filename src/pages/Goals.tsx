@@ -140,8 +140,8 @@ export default function Goals() {
     <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-            <Target className="h-6 w-6 text-primary" /> Goals
+          <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+            <Target className="h-6 w-6 text-secondary" /> Goals
           </h1>
           <p className="text-muted-foreground">{activeGoals.length} active goal{activeGoals.length !== 1 ? "s" : ""}</p>
         </div>
