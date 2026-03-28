@@ -263,9 +263,9 @@ export default function Water() {
               {totalToday}ml <span className="text-muted-foreground font-normal text-sm">/ {goal}ml</span>
             </p>
 
-            {totalToday === 0 && (
+           {totalToday === 0 && (
               <p className="mt-2 text-sm text-muted-foreground text-center">
-                No water logged yet today. Tap a button below to start! 🚰
+                Hydration check! You haven't logged any water today. Start with a glass right now. 💧
               </p>
             )}
           </CardContent>
