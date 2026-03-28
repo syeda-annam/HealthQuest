@@ -11,7 +11,7 @@ interface MobileNavProps {
 
 export function MobileNav({ moduleCycle, moduleMood }: MobileNavProps) {
   const items = [
-    { title: "Dashboard", url: "/", icon: LayoutDashboard },
+    { title: "Home", url: "/", icon: LayoutDashboard },
     { title: "Workouts", url: "/workouts", icon: Dumbbell },
     { title: "Nutrition", url: "/nutrition", icon: UtensilsCrossed },
     { title: "Sleep", url: "/sleep", icon: Moon },
@@ -31,12 +31,12 @@ export function MobileNav({ moduleCycle, moduleMood }: MobileNavProps) {
           to={item.url}
           end={item.url === "/"}
           className={({ isActive }) =>
-            `flex flex-col items-center gap-0.5 px-3 py-2 text-[10px] min-w-[60px] ${
-              isActive ? "text-primary" : "text-muted-foreground"
+            `flex flex-col items-center gap-0.5 px-3 py-2 text-[10px] min-w-[56px] transition-colors ${
+              isActive ? "text-primary font-semibold" : "text-muted-foreground"
             }`
           }
         >
-          <item.icon className="h-5 w-5" />
+          <item.icon className="h-[18px] w-[18px]" />
           <span>{item.title}</span>
         </NavLink>
       ))}
