@@ -201,8 +201,8 @@ export default function Water() {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-          <Droplets className="h-7 w-7 text-primary" />
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+          <Droplets className="h-6 w-6 text-secondary" />
           Water Intake
         </h1>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -263,9 +263,9 @@ export default function Water() {
               {totalToday}ml <span className="text-muted-foreground font-normal text-sm">/ {goal}ml</span>
             </p>
 
-            {totalToday === 0 && (
+           {totalToday === 0 && (
               <p className="mt-2 text-sm text-muted-foreground text-center">
-                No water logged yet today. Tap a button below to start! 🚰
+                Hydration check! You haven't logged any water today. Start with a glass right now. 💧
               </p>
             )}
           </CardContent>

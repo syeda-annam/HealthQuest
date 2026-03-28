@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { AIChatDrawer } from "@/components/AIChatDrawer";
 import { LevelUpCelebration } from "@/components/LevelUpCelebration";
 import { XPBar } from "@/components/XPBar";
+import { DailyProgressBar } from "@/components/DailyProgressBar";
 import { Activity, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -18,7 +19,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
   const [levelUpLevel, setLevelUpLevel] = useState<number | null>(null);
 
-  // Expose level up trigger globally so XP awards from any page can trigger it
   useEffect(() => {
     (window as any).__healthquest_level_up = (newLevel: number) => setLevelUpLevel(newLevel);
     return () => { delete (window as any).__healthquest_level_up; };
@@ -50,11 +50,14 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
           <AppSidebar moduleCycle={moduleCycle} moduleMood={moduleMood} level={level} totalXP={totalXPEarned} name={name} />
         </div>
         <div className="flex-1 flex flex-col">
-          <header className="h-14 flex items-center justify-between border-b border-border px-4">
-            <div className="flex items-center gap-2">
+          {/* Daily progress bar */}
+          <DailyProgressBar />
+          {/* Top header */}
+          <header className="h-16 flex items-center justify-between border-b border-border bg-card px-6">
+            <div className="flex items-center gap-3">
               <SidebarTrigger className="hidden md:flex" />
               <Activity className="h-5 w-5 text-primary md:hidden" />
-              <span className="font-heading font-bold text-foreground">HealthQuest</span>
+              <span className="font-heading font-extrabold text-foreground">HealthQuest</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex w-40">
@@ -66,7 +69,7 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
               </Button>
             </div>
           </header>
-          <main className="flex-1 p-4 md:p-6 pb-20 md:pb-6 overflow-auto">
+          <main className="flex-1 p-6 md:p-8 pb-24 md:pb-8 overflow-auto">
             {children}
           </main>
         </div>

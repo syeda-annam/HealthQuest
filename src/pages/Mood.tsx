@@ -206,8 +206,8 @@ export default function Mood() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-        <Smile className="h-7 w-7 text-primary" />
+      <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+        <Smile className="h-6 w-6 text-secondary" />
         Mental Health
       </h1>
 
@@ -309,7 +309,7 @@ export default function Mood() {
               <CardContent className="py-8 text-center">
                 <Smile className="h-10 w-10 mx-auto text-muted-foreground/40 mb-3" />
                 <p className="text-sm text-muted-foreground">
-                  No mood data yet. Log your first check-in to start seeing trends! 🧠
+                  No mood check-in yet today. How are you feeling? Tracking this builds self-awareness over time.
                 </p>
               </CardContent>
             </Card>

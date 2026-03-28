@@ -20,13 +20,13 @@ export function LevelUpCelebration({ level, onDismiss }: LevelUpCelebrationProps
       onClick={onDismiss}
     >
       <div className="text-center space-y-4 animate-in zoom-in-50 duration-500">
-        <p className="text-6xl md:text-8xl font-heading font-bold text-primary drop-shadow-lg">
+        <p className="text-6xl md:text-8xl font-heading font-extrabold text-accent drop-shadow-lg">
           LEVEL UP!
         </p>
-        <p className="text-4xl md:text-6xl font-heading font-bold text-foreground">
+        <p className="text-4xl md:text-6xl font-heading font-extrabold text-foreground">
           Level {level}
         </p>
-        <p className="text-xl md:text-2xl text-primary font-medium">
+        <p className="text-xl md:text-2xl text-accent font-semibold">
           {getLevelName(level)}
         </p>
       </div>

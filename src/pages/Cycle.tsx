@@ -267,8 +267,8 @@ export default function Cycle() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-          <Heart className="h-6 w-6 text-primary" /> Cycle Tracker
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+          <Heart className="h-6 w-6 text-secondary" /> Cycle Tracker
         </h1>
         <p className="text-muted-foreground">{format(currentMonth, "MMMM yyyy")}</p>
       </div>

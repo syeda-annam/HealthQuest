@@ -194,8 +194,8 @@ export default function Sleep() {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-          <Moon className="h-7 w-7 text-primary" />
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+          <Moon className="h-6 w-6 text-secondary" />
           Sleep Tracker
         </h1>
         <span className="text-sm text-muted-foreground">
@@ -335,7 +335,7 @@ export default function Sleep() {
               <CardContent className="py-8 text-center">
                 <Moon className="h-10 w-10 mx-auto text-muted-foreground/40 mb-3" />
                 <p className="text-sm text-muted-foreground">
-                  No sleep data logged yet. Log your first night above to start tracking! 😴
+                  No sleep logged yet. How did you sleep last night? Your body will thank you for tracking.
                 </p>
               </CardContent>
             </Card>

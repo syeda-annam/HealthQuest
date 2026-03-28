@@ -251,8 +251,8 @@ export default function Settings() {
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-        <SettingsIcon className="h-6 w-6 text-primary" /> Settings
+      <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+        <SettingsIcon className="h-6 w-6 text-secondary" /> Settings
       </h1>
 
       {/* Profile Section */}

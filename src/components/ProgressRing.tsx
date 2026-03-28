@@ -44,7 +44,7 @@ export function ProgressRing({ value, max, label, unit = "", size = 100, color }
           {unit && <span className="text-[10px] text-muted-foreground">{unit}</span>}
         </div>
       </div>
-      <span className="text-xs text-muted-foreground font-medium">{label}</span>
+      <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">{label}</span>
     </div>
   );
 }

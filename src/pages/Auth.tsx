@@ -58,14 +58,14 @@ export default function Auth() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md border-border bg-card">
+      <Card className="w-full max-w-md">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
             <Activity className="h-8 w-8 text-primary" />
-            <CardTitle className="text-3xl font-heading text-foreground">HealthQuest</CardTitle>
+            <CardTitle className="text-3xl font-heading font-extrabold text-foreground">HealthQuest</CardTitle>
           </div>
           <p className="text-muted-foreground">
-            {isLogin ? "Welcome back" : "Create your account"}
+            {isLogin ? "Welcome back. Let's pick up where you left off." : "Start your wellness journey today."}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -127,7 +127,7 @@ export default function Auth() {
             <button
               type="button"
               onClick={() => setIsLogin(!isLogin)}
-              className="text-primary hover:underline font-medium"
+              className="text-primary hover:underline font-semibold"
             >
               {isLogin ? "Sign Up" : "Sign In"}
             </button>

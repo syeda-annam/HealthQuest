@@ -31,7 +31,6 @@ export function AIChatDrawer() {
   const [loaded, setLoaded] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Load history when drawer opens
   useEffect(() => {
     if (!open || !user || loaded) return;
     const loadHistory = async () => {
@@ -63,7 +62,6 @@ export function AIChatDrawer() {
     setInput("");
     setIsLoading(true);
 
-    // Save user message
     await supabase.from("chat_messages").insert([{ user_id: user.id, role: "user", content: text.trim() }]);
 
     let assistantSoFar = "";
@@ -133,7 +131,6 @@ export function AIChatDrawer() {
         }
       }
 
-      // Save assistant message
       if (assistantSoFar) {
         await supabase.from("chat_messages").insert([{ user_id: user.id, role: "assistant", content: assistantSoFar }]);
       }
@@ -155,27 +152,23 @@ export function AIChatDrawer() {
 
   return (
     <>
-      {/* Floating button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 md:bottom-6 right-4 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 transition-transform"
+          className="fixed bottom-24 md:bottom-6 right-4 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 hover:shadow-card-hover transition-all duration-200"
           aria-label="Open AI Chat"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
       )}
 
-      {/* Backdrop */}
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setOpen(false)}>
-          {/* Drawer */}
           <div
-            className="absolute bottom-0 left-0 right-0 h-[70vh] bg-card border-t border-border rounded-t-2xl flex flex-col animate-in slide-in-from-bottom duration-300"
+            className="absolute bottom-0 left-0 right-0 h-[70vh] bg-card border-t border-border rounded-t-[16px] flex flex-col animate-in slide-in-from-bottom duration-300"
             onClick={e => e.stopPropagation()}
           >
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-border shrink-0">
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-primary" />
                 <span className="font-heading font-bold text-foreground">HealthQuest AI</span>
@@ -190,18 +183,18 @@ export function AIChatDrawer() {
               </div>
             </div>
 
-            {/* Messages */}
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-3">
               {messages.length === 0 && !isLoading && (
                 <div className="text-center py-8">
                   <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
-                  <p className="text-sm text-muted-foreground mb-4">Ask me anything about your health data!</p>
+                  <p className="text-sm text-foreground font-medium mb-1">Hey! I'm your HealthQuest assistant.</p>
+                  <p className="text-sm text-muted-foreground mb-4">I know your sleep, nutrition, and water data. Ask me anything.</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {SUGGESTED_PROMPTS.map(prompt => (
                       <button
                         key={prompt}
                         onClick={() => sendMessage(prompt)}
-                        className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted/50 text-foreground hover:bg-accent/50 transition-colors"
+                        className="text-xs px-3 py-1.5 rounded-sm border border-border bg-card text-foreground hover:bg-muted transition-colors"
                       >
                         {prompt}
                       </button>
@@ -212,10 +205,10 @@ export function AIChatDrawer() {
 
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm ${
+                  <div className={`max-w-[85%] rounded-lg px-3.5 py-2.5 text-sm ${
                     msg.role === "user"
-                      ? "bg-primary text-primary-foreground rounded-br-sm"
-                      : "bg-muted text-foreground rounded-bl-sm"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
                   }`}>
                     {msg.role === "assistant" ? (
                       <div className="prose prose-sm dark:prose-invert max-w-none [&>p]:m-0 [&>ul]:my-1 [&>ol]:my-1 [&>h1]:text-base [&>h2]:text-sm [&>h3]:text-sm">
@@ -230,7 +223,7 @@ export function AIChatDrawer() {
 
               {isLoading && !messages.some(m => m.role === "assistant" && !m.id && m === messages[messages.length - 1]) && (
                 <div className="flex justify-start">
-                  <div className="bg-muted rounded-2xl rounded-bl-sm px-4 py-3 flex gap-1.5">
+                  <div className="bg-muted rounded-lg px-4 py-3 flex gap-1.5">
                     <span className="w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:0ms]" />
                     <span className="w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:150ms]" />
                     <span className="w-2 h-2 rounded-full bg-muted-foreground/50 animate-bounce [animation-delay:300ms]" />
@@ -239,8 +232,7 @@ export function AIChatDrawer() {
               )}
             </div>
 
-            {/* Input */}
-            <div className="px-4 py-3 border-t border-border shrink-0">
+            <div className="px-5 py-3 border-t border-border shrink-0">
               <form
                 onSubmit={(e) => { e.preventDefault(); sendMessage(input); }}
                 className="flex gap-2"
