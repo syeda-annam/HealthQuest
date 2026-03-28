@@ -335,7 +335,7 @@ export default function Sleep() {
               <CardContent className="py-8 text-center">
                 <Moon className="h-10 w-10 mx-auto text-muted-foreground/40 mb-3" />
                 <p className="text-sm text-muted-foreground">
-                  No sleep data logged yet. Log your first night above to start tracking! 😴
+                  No sleep logged yet. How did you sleep last night? Your body will thank you for tracking.
                 </p>
               </CardContent>
             </Card>
