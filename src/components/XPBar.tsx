@@ -15,7 +15,7 @@ export function XPBar({ level, totalXP, compact }: XPBarProps) {
   if (compact) {
     return (
       <div className="flex items-center gap-2 w-full">
-        <Badge variant="secondary" className="text-[10px] px-1.5 py-0 shrink-0">
+        <Badge variant="secondary" className="text-[10px] px-1.5 py-0 shrink-0 rounded-sm">
           Lv.{level}
         </Badge>
         <div className="flex-1 min-w-0">
@@ -32,7 +32,7 @@ export function XPBar({ level, totalXP, compact }: XPBarProps) {
     <div className="space-y-1">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Badge className="text-xs">Lv.{level}</Badge>
+          <Badge className="text-xs rounded-sm">Lv.{level}</Badge>
           <span className="text-sm font-medium text-foreground">{getLevelName(level)}</span>
         </div>
         <span className="text-xs text-muted-foreground tabular-nums">

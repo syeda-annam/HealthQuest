@@ -21,7 +21,6 @@ export function DashboardXPCard({ level, totalXP }: { level: number; totalXP: nu
     if (!user) return;
     const today = format(new Date(), "yyyy-MM-dd");
 
-    // Compute today's XP sources by checking what was logged today
     const computeTodayXP = async () => {
       const sources: XPEvent[] = [];
 
@@ -34,7 +33,6 @@ export function DashboardXPCard({ level, totalXP }: { level: number; totalXP: nu
         supabase.from("cycle_logs").select("id").eq("user_id", user.id).eq("logged_date", today).single(),
       ]);
 
-      // Also get targets for bonus calculations
       const { data: targets } = await supabase.from("targets").select("water, sleep, calories").eq("user_id", user.id).single();
 
       if (waterRes.data) {
@@ -76,10 +74,10 @@ export function DashboardXPCard({ level, totalXP }: { level: number; totalXP: nu
   }, [user, level, totalXP]);
 
   return (
-    <Card className="border-border bg-card">
+    <Card className="border-l-4 border-l-secondary">
       <CardHeader className="pb-3">
-        <CardTitle className="text-lg font-heading flex items-center gap-2">
-          <Star className="h-5 w-5 text-primary" />
+        <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
+          <Star className="h-5 w-5 text-highlight" />
           XP &amp; Level
         </CardTitle>
       </CardHeader>
@@ -88,7 +86,7 @@ export function DashboardXPCard({ level, totalXP }: { level: number; totalXP: nu
 
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">XP earned today</span>
-          <span className="font-bold text-primary">+{todayXP} XP</span>
+          <span className="font-bold text-secondary">+{todayXP} XP</span>
         </div>
 
         {todaySources.length > 0 ? (
@@ -96,7 +94,7 @@ export function DashboardXPCard({ level, totalXP }: { level: number; totalXP: nu
             {todaySources.map((s, i) => (
               <div key={i} className="flex justify-between text-xs text-muted-foreground">
                 <span>{s.action}</span>
-                <span className="text-primary font-medium">+{s.xp}</span>
+                <span className="text-secondary font-medium">+{s.xp}</span>
               </div>
             ))}
           </div>

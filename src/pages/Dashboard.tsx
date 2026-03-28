@@ -50,8 +50,6 @@ export default function Dashboard() {
       setLoading(true);
       const today = format(new Date(), "yyyy-MM-dd");
 
-      const yesterday = format(subDays(new Date(), 1), "yyyy-MM-dd");
-
       const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes, workoutRes, goalsRes] = await Promise.all([
         supabase.from("profiles").select("name").eq("id", user.id).single(),
         supabase.from("targets").select("*").eq("user_id", user.id).single(),
@@ -86,46 +84,53 @@ export default function Dashboard() {
     fetchAll();
   }, [user]);
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+  };
+
   const today = format(new Date(), "EEEE, MMMM d");
 
   if (loading) {
     return (
-      <div className="space-y-6 max-w-5xl mx-auto">
-        <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-4 w-40" />
-        <Skeleton className="h-40 w-full" />
-        <div className="grid gap-4 md:grid-cols-2">
-          <Skeleton className="h-48" />
-          <Skeleton className="h-48" />
+      <div className="space-y-8 max-w-5xl mx-auto">
+        <Skeleton className="h-10 w-80" />
+        <Skeleton className="h-4 w-48" />
+        <Skeleton className="h-40 w-full rounded-lg" />
+        <div className="grid gap-6 md:grid-cols-2">
+          <Skeleton className="h-48 rounded-lg" />
+          <Skeleton className="h-48 rounded-lg" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
-          Hello, {name || "there"} 👋
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground">
+          {getGreeting()}, {name || "there"}. 👋
         </h1>
-        <p className="text-muted-foreground">{today}</p>
+        <p className="text-muted-foreground mt-1">Here's your health snapshot for today — {today}.</p>
       </div>
 
-      <Card className="border-border bg-card">
-        <CardContent className="flex flex-wrap justify-around gap-4 py-6">
+      <Card>
+        <CardContent className="flex flex-wrap justify-around gap-6 py-6">
           <ProgressRing value={caloriesToday} max={targets?.calories || 2000} label="Calories" unit="kcal" />
-          <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(200, 80%, 50%)" />
-          <ProgressRing value={sleepLastNight} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(260, 60%, 55%)" />
-          <ProgressRing value={workoutToday ? 1 : 0} max={1} label="Workout" unit="" color="hsl(30, 90%, 55%)" />
-          <ProgressRing value={moodToday} max={5} label="Mood" unit="/5" color="hsl(340, 70%, 55%)" />
+          <ProgressRing value={waterToday} max={targets?.water || 2500} label="Water" unit="ml" color="hsl(var(--secondary))" />
+          <ProgressRing value={sleepLastNight} max={targets?.sleep || 7.5} label="Sleep" unit="hrs" color="hsl(var(--chart-4))" />
+          <ProgressRing value={workoutToday ? 1 : 0} max={1} label="Workout" unit="" color="hsl(var(--chart-5))" />
+          <ProgressRing value={moodToday} max={5} label="Mood" unit="/5" color="hsl(var(--accent))" />
         </CardContent>
       </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         <DashboardXPCard level={level} totalXP={totalXPEarned} />
-        <Card className="border-border bg-card">
+        <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-heading flex items-center gap-2">
+            <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
               <Target className="h-5 w-5 text-primary" />
               Active Goals
             </CardTitle>
@@ -133,9 +138,9 @@ export default function Dashboard() {
           <CardContent className="space-y-3">
             {activeGoals.length === 0 ? (
               <div className="text-center py-4">
-                <p className="text-sm text-muted-foreground">No active goals yet.</p>
-                <Button variant="link" className="text-sm" onClick={() => navigate("/goals")}>
-                  Create a goal →
+                <p className="text-sm text-muted-foreground">You haven't set any goals yet. Goals give your tracking purpose.</p>
+                <Button variant="outline" className="text-sm mt-3" onClick={() => navigate("/goals")}>
+                  Create your first goal →
                 </Button>
               </div>
             ) : (
@@ -143,13 +148,13 @@ export default function Dashboard() {
                 const pct = goal.target_value > 0 ? Math.min(Math.round((goal.current_value / goal.target_value) * 100), 100) : 0;
                 const daysLeft = goal.target_date ? differenceInDays(new Date(goal.target_date), new Date()) : null;
                 return (
-                  <div key={goal.id} className="rounded-lg border border-border p-3 space-y-2">
+                  <div key={goal.id} className="rounded-lg border border-border p-3 space-y-2 border-l-4 border-l-secondary">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium text-foreground truncate">{goal.title}</span>
-                      <span className="text-xs text-muted-foreground">{pct}%</span>
+                      <span className="text-xs text-muted-foreground font-medium">{pct}%</span>
                     </div>
                     <div className="h-2 w-full rounded-full bg-muted">
-                      <div className="h-2 rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+                      <div className="h-2 rounded-full bg-secondary transition-all" style={{ width: `${pct}%` }} />
                     </div>
                     {daysLeft !== null && (
                       <p className={`text-xs ${daysLeft < 0 ? "text-destructive" : "text-muted-foreground"}`}>
@@ -163,48 +168,54 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card">
+        <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg font-heading flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-primary" />
+            <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
+              <Lightbulb className="h-5 w-5 text-highlight" />
               AI Insights
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="rounded-lg border border-dashed border-border p-6 text-center">
-              <Lightbulb className="h-10 w-10 mx-auto text-muted-foreground/40 mb-3" />
+              <Lightbulb className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
               <p className="text-sm text-muted-foreground">
-                AI-powered insights will appear here once you start logging your daily activities.
+                Keep logging your daily activities and I'll start finding patterns in your health data.
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="border-border bg-card">
+      <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg font-heading">Quick Log</CardTitle>
+          <CardTitle className="text-base font-heading font-semibold">Quick Log</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button variant="outline" className="gap-2" onClick={() => navigate("/water")}>
-            <Droplets className="h-4 w-4 text-primary" /> Log Water
+            <Droplets className="h-4 w-4" /> Log Water
           </Button>
           <Button variant="outline" className="gap-2" onClick={() => navigate("/mood")}>
-            <Smile className="h-4 w-4 text-primary" /> Log Mood
+            <Smile className="h-4 w-4" /> Log Mood
           </Button>
           <Button variant="outline" className="gap-2" onClick={() => navigate("/sleep")}>
-            <Moon className="h-4 w-4 text-primary" /> Log Sleep
+            <Moon className="h-4 w-4" /> Log Sleep
+          </Button>
+          <Button variant="outline" className="gap-2" onClick={() => navigate("/workouts")}>
+            <Dumbbell className="h-4 w-4" /> Log Workout
+          </Button>
+          <Button variant="outline" className="gap-2" onClick={() => navigate("/nutrition")}>
+            <UtensilsCrossed className="h-4 w-4" /> Log Meal
           </Button>
         </CardContent>
       </Card>
 
-      <Card className="border-border bg-card">
+      <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-lg font-heading">Recent Activity</CardTitle>
+          <CardTitle className="text-base font-heading font-semibold">Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-6">
-            <p className="text-sm text-muted-foreground">No activity logged yet. Use the quick log buttons above to get started!</p>
+            <p className="text-sm text-muted-foreground">Your activity feed will show up here as you log throughout the day.</p>
           </div>
         </CardContent>
       </Card>
