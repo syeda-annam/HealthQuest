@@ -194,8 +194,8 @@ export default function Sleep() {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-          <Moon className="h-7 w-7 text-primary" />
+        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+          <Moon className="h-6 w-6 text-secondary" />
           Sleep Tracker
         </h1>
         <span className="text-sm text-muted-foreground">

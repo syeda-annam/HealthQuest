@@ -206,8 +206,8 @@ export default function Mood() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <h1 className="text-2xl md:text-3xl font-heading font-bold text-foreground flex items-center gap-2">
-        <Smile className="h-7 w-7 text-primary" />
+      <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
+        <Smile className="h-6 w-6 text-secondary" />
         Mental Health
       </h1>
 
