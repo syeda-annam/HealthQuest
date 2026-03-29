@@ -155,7 +155,7 @@ export function AIChatDrawer() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-24 md:bottom-6 right-4 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 hover:shadow-card-hover transition-all duration-200"
+          className="fixed bottom-24 md:bottom-6 right-4 z-50 w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:scale-105 hover:bg-highlight hover:shadow-card-hover transition-all duration-200"
           aria-label="Open AI Chat"
         >
           <MessageCircle className="h-6 w-6" />
@@ -165,13 +165,13 @@ export function AIChatDrawer() {
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40" onClick={() => setOpen(false)}>
           <div
-            className="absolute bottom-0 left-0 right-0 h-[70vh] bg-card border-t border-border rounded-t-[16px] flex flex-col animate-in slide-in-from-bottom duration-300"
+            className="absolute bottom-0 left-0 right-0 h-[70vh] bg-card border-t border-border rounded-t-xl flex flex-col animate-in slide-in-from-bottom duration-300"
             onClick={e => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-5 py-3 border-b border-border shrink-0">
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-primary" />
-                <span className="font-heading font-bold text-foreground">HealthQuest AI</span>
+                <span className="font-heading text-foreground">HealthQuest AI</span>
               </div>
               <div className="flex items-center gap-1">
                 <Button variant="ghost" size="icon" onClick={() => { setMessages([]); setLoaded(true); }} aria-label="New Chat">
@@ -187,14 +187,14 @@ export function AIChatDrawer() {
               {messages.length === 0 && !isLoading && (
                 <div className="text-center py-8">
                   <MessageCircle className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
-                  <p className="text-sm text-foreground font-medium mb-1">Hey! I'm your HealthQuest assistant.</p>
-                  <p className="text-sm text-muted-foreground mb-4">I know your sleep, nutrition, and water data. Ask me anything.</p>
+                  <p className="text-sm text-foreground font-medium mb-1">Hi! I'm your HealthQuest companion.</p>
+                  <p className="text-sm text-muted-foreground mb-4">I track your sleep, nutrition, mood and cycle — all together — so my guidance actually knows you.</p>
                   <div className="flex flex-wrap gap-2 justify-center">
                     {SUGGESTED_PROMPTS.map(prompt => (
                       <button
                         key={prompt}
                         onClick={() => sendMessage(prompt)}
-                        className="text-xs px-3 py-1.5 rounded-sm border border-border bg-card text-foreground hover:bg-muted transition-colors"
+                        className="text-xs px-3 py-1.5 rounded-sm border border-border bg-muted text-foreground hover:bg-accent/30 transition-colors"
                       >
                         {prompt}
                       </button>

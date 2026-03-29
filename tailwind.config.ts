@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        heading: ['"Plus Jakarta Sans"', "sans-serif"],
-        body: ["Inter", "sans-serif"],
+        heading: ['"DM Serif Display"', "serif"],
+        body: ['"DM Sans"', "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -65,15 +65,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        fortune: "hsl(var(--fortune))",
+        swimming: "hsl(var(--swimming))",
+        blumine: "hsl(var(--blumine))",
+        comforting: "hsl(var(--comforting))",
+        angelico: "hsl(var(--angelico))",
+        linnet: "hsl(var(--linnet))",
       },
       borderRadius: {
-        lg: "12px",
+        lg: "14px",
         md: "8px",
-        sm: "6px",
+        sm: "4px",
+        xl: "18px",
       },
       boxShadow: {
-        card: "0 2px 8px rgba(0,0,0,0.06)",
-        "card-hover": "0 4px 12px rgba(27,67,50,0.15)",
+        card: "0 2px 12px rgba(46,96,115,0.08)",
+        "card-hover": "0 4px 16px rgba(46,96,115,0.14)",
       },
       keyframes: {
         "accordion-down": {

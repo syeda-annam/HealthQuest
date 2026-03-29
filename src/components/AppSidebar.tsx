@@ -37,12 +37,11 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-r-0 bg-sidebar">
+    <Sidebar collapsible="icon" className="border-r-0 bg-sidebar" style={{ width: collapsed ? undefined : "240px" }}>
       <SidebarContent className="pt-6">
-        {/* Logo */}
         {!collapsed && (
           <div className="px-5 pb-4 mb-2 border-b border-sidebar-border">
-            <span className="font-heading font-extrabold text-lg text-sidebar-foreground tracking-tight">
+            <span className="font-heading text-[1.3rem] text-sidebar-foreground tracking-tight">
               HealthQuest
             </span>
           </div>
@@ -51,8 +50,8 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => {
-                const isActive = item.url === "/" 
-                  ? location.pathname === "/" 
+                const isActive = item.url === "/"
+                  ? location.pathname === "/"
                   : location.pathname.startsWith(item.url);
                 return (
                   <SidebarMenuItem key={item.title}>
@@ -60,16 +59,16 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
                       <NavLink
                         to={item.url}
                         end={item.url === "/"}
-                        className={`relative transition-colors text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/40 ${
-                          isActive ? "bg-sidebar-accent text-sidebar-accent-foreground font-semibold" : ""
+                        className={`relative transition-colors text-sidebar-foreground/85 hover:text-sidebar-foreground hover:bg-[rgba(193,230,229,0.15)] font-body text-[0.9rem] ${
+                          isActive ? "bg-[rgba(193,230,229,0.2)] text-sidebar-foreground font-semibold" : ""
                         }`}
-                        activeClassName="bg-sidebar-accent text-sidebar-accent-foreground font-semibold"
+                        activeClassName="bg-[rgba(193,230,229,0.2)] text-sidebar-foreground font-semibold"
                       >
                         {isActive && (
                           <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-accent" />
                         )}
                         <item.icon className="mr-2 h-[18px] w-[18px] shrink-0" />
-                        {!collapsed && <span className="text-sm">{item.title}</span>}
+                        {!collapsed && <span>{item.title}</span>}
                       </NavLink>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -83,7 +82,7 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
         <SidebarFooter className="p-4 border-t border-sidebar-border">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center text-xs font-bold text-sidebar-accent-foreground">
+              <div className="w-8 h-8 rounded-full bg-sidebar-accent flex items-center justify-center text-xs font-bold text-sidebar-primary-foreground">
                 {(name || "A").charAt(0).toUpperCase()}
               </div>
               <p className="text-sm font-medium text-sidebar-foreground truncate">{name || "Adventurer"}</p>

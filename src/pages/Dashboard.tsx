@@ -110,10 +110,10 @@ export default function Dashboard() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground">
-          {getGreeting()}, {name || "there"}. 👋
-        </h1>
-        <p className="text-muted-foreground mt-1">Here's your health snapshot for today — {today}.</p>
+         <h1 className="text-2xl md:text-3xl font-heading font-bold text-primary">
+           {getGreeting()}, {name || "there"}. 👋
+         </h1>
+         <p className="text-muted-foreground mt-1">Here's your wellness snapshot for today — {today}.</p>
       </div>
 
       <Card>
