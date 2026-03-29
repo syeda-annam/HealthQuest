@@ -265,7 +265,7 @@ export default function Water() {
 
            {totalToday === 0 && (
               <p className="mt-2 text-sm text-muted-foreground text-center">
-                Hydration check! You haven't logged any water today. Start with a glass right now. 💧
+                No water logged yet today. Start with one glass — your body will thank you. 💧
               </p>
             )}
           </CardContent>

@@ -349,7 +349,7 @@ export default function Insights() {
       {bestWeek && (
         <Card className="border-border bg-card">
           <CardContent className="py-5 flex items-center gap-3">
-            <Trophy className="h-8 w-8 text-amber-500 shrink-0" />
+            <Trophy className="h-8 w-8 text-highlight shrink-0" />
             <div>
               <p className="font-heading font-bold text-foreground">Your best week was {bestWeek.range}</p>
               <p className="text-sm text-muted-foreground">with a wellness score of {bestWeek.score}/100</p>
@@ -396,7 +396,7 @@ export default function Insights() {
                   <XAxis dataKey="category" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
                   <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
-                  <Bar dataKey="sleep" fill="hsl(260, 60%, 55%)" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="sleep" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -417,7 +417,7 @@ export default function Insights() {
                   <XAxis dataKey="water" name="Water (ml)" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <YAxis dataKey="mood" name="Mood" domain={[0, 5]} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
-                  <Scatter data={waterMoodScatter} fill="hsl(200, 80%, 50%)" />
+                  <Scatter data={waterMoodScatter} fill="hsl(var(--primary))" />
                 </ScatterChart>
               </ResponsiveContainer>
             )}
@@ -438,7 +438,7 @@ export default function Insights() {
                   <XAxis dataKey="week" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} angle={-30} textAnchor="end" height={50} />
                   <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
-                  <Line type="monotone" dataKey="volume" stroke="hsl(30, 90%, 55%)" strokeWidth={2} dot={{ fill: "hsl(30, 90%, 55%)" }} />
+                  <Line type="monotone" dataKey="volume" stroke="hsl(var(--highlight))" strokeWidth={2} dot={{ fill: "hsl(var(--highlight))" }} />
                 </LineChart>
               </ResponsiveContainer>
             )}
