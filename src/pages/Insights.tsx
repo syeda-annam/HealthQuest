@@ -349,7 +349,7 @@ export default function Insights() {
       {bestWeek && (
         <Card className="border-border bg-card">
           <CardContent className="py-5 flex items-center gap-3">
-            <Trophy className="h-8 w-8 text-amber-500 shrink-0" />
+            <Trophy className="h-8 w-8 text-highlight shrink-0" />
             <div>
               <p className="font-heading font-bold text-foreground">Your best week was {bestWeek.range}</p>
               <p className="text-sm text-muted-foreground">with a wellness score of {bestWeek.score}/100</p>
