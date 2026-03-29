@@ -417,7 +417,7 @@ export default function Insights() {
                   <XAxis dataKey="water" name="Water (ml)" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <YAxis dataKey="mood" name="Mood" domain={[0, 5]} tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
-                  <Scatter data={waterMoodScatter} fill="hsl(200, 80%, 50%)" />
+                  <Scatter data={waterMoodScatter} fill="hsl(var(--primary))" />
                 </ScatterChart>
               </ResponsiveContainer>
             )}
