@@ -438,7 +438,7 @@ export default function Insights() {
                   <XAxis dataKey="week" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 10 }} angle={-30} textAnchor="end" height={50} />
                   <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
-                  <Line type="monotone" dataKey="volume" stroke="hsl(30, 90%, 55%)" strokeWidth={2} dot={{ fill: "hsl(30, 90%, 55%)" }} />
+                  <Line type="monotone" dataKey="volume" stroke="hsl(var(--highlight))" strokeWidth={2} dot={{ fill: "hsl(var(--highlight))" }} />
                 </LineChart>
               </ResponsiveContainer>
             )}

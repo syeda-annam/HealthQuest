@@ -436,7 +436,7 @@ export default function Workouts() {
         </CardHeader>
         <CardContent>
           {workoutHistory.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm">No workouts logged yet.</div>
+            <div className="text-center py-8 text-muted-foreground text-sm">Nothing logged yet today. Even a short walk counts. Want me to suggest something light?</div>
           ) : (
             <div className="space-y-3 max-h-96 overflow-y-auto">
               {workoutHistory.slice(0, 20).map((log) => {

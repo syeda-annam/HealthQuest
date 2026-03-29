@@ -178,9 +178,9 @@ export default function Dashboard() {
           <CardContent>
             <div className="rounded-lg border border-dashed border-border p-6 text-center">
               <Lightbulb className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
-              <p className="text-sm text-muted-foreground">
-                Keep logging your daily activities and I'll start finding patterns in your health data.
-              </p>
+               <p className="text-sm text-muted-foreground">
+                 Log a few more days and I'll start uncovering patterns across your sleep, mood, and nutrition.
+               </p>
             </div>
           </CardContent>
         </Card>
