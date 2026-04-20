@@ -346,6 +346,7 @@ export default function Nutrition() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="nutrition" refreshKey={todayLog?.meals.length || 0} />
       <div>
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground">Nutrition Tracker</h1>
         <p className="text-muted-foreground">{format(new Date(), "EEEE, MMMM d")}</p>

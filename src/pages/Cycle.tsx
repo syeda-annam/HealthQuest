@@ -269,6 +269,7 @@ export default function Cycle() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="cycle" refreshKey={allLogs.length} />
       <div>
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
           <Heart className="h-6 w-6 text-secondary" /> Cycle Tracker

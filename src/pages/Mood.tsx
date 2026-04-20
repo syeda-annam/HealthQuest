@@ -208,6 +208,7 @@ export default function Mood() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="mood" refreshKey={todayLogged ? 1 : 0} />
       {/* Header */}
       <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
         <Smile className="h-6 w-6 text-secondary" />
