@@ -130,6 +130,8 @@ export default function Dashboard() {
 
       <DashboardStreaksRow />
 
+      <ChallengesCard />
+
       <div className="grid gap-6 md:grid-cols-2">
         <DashboardXPCard level={level} totalXP={totalXPEarned} />
         <Card>
