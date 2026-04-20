@@ -377,6 +377,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_challenges: {
+        Row: {
+          challenge_id: string
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          current_value: number
+          id: string
+          updated_at: string
+          user_id: string
+          week_start: string
+        }
+        Insert: {
+          challenge_id: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          current_value?: number
+          id?: string
+          updated_at?: string
+          user_id: string
+          week_start: string
+        }
+        Update: {
+          challenge_id?: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          current_value?: number
+          id?: string
+          updated_at?: string
+          user_id?: string
+          week_start?: string
+        }
+        Relationships: []
+      }
       water_logs: {
         Row: {
           created_at: string | null
@@ -401,6 +437,27 @@ export type Database = {
           id?: string
           logged_date?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      weekly_challenges: {
+        Row: {
+          challenges: Json
+          created_at: string
+          id: string
+          week_start: string
+        }
+        Insert: {
+          challenges?: Json
+          created_at?: string
+          id?: string
+          week_start: string
+        }
+        Update: {
+          challenges?: Json
+          created_at?: string
+          id?: string
+          week_start?: string
         }
         Relationships: []
       }
