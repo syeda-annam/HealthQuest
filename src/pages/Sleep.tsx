@@ -14,6 +14,8 @@ import {
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP, XPSource } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 

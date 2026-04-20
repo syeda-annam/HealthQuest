@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Smile, Settings } from "lucide-react";
 import { format, subDays, eachDayOfInterval } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 import {
