@@ -247,7 +247,7 @@ export async function updateChallengeProgress(userId: string) {
 export async function ensureWeeklyChallengeRow(weekStart: string) {
   const defs = getChallengesForWeek(weekStart);
   await supabase.from("weekly_challenges").upsert(
-    { week_start: weekStart, challenges: defs as unknown as object[] },
+    [{ week_start: weekStart, challenges: defs as unknown as object[] }],
     { onConflict: "week_start" },
   );
 }
