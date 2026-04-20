@@ -12,6 +12,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "@/hooks/use-toast";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { Heart, Settings, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths,
