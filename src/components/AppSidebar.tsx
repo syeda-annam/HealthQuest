@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Dumbbell, UtensilsCrossed, Moon, Droplets,
-  Smile, Heart, Target, Lightbulb, Settings, Award,
+  Smile, Heart, Target, Lightbulb, Settings, Award, Trophy,
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -32,6 +32,7 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
     ...(moduleMood ? [{ title: "Mood", url: "/mood", icon: Smile }] : []),
     ...(moduleCycle ? [{ title: "Cycle", url: "/cycle", icon: Heart }] : []),
     { title: "Goals", url: "/goals", icon: Target },
+    { title: "Challenges", url: "/challenges", icon: Trophy },
     { title: "Badges", url: "/badges", icon: Award },
     { title: "Insights", url: "/insights", icon: Lightbulb },
     { title: "Settings", url: "/settings", icon: Settings },
