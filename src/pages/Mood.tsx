@@ -146,6 +146,7 @@ export default function Mood() {
       if (user) {
         updateGoalsForModule(user.id, "Mood");
         awardXP(user.id, [{ action: "Logged mood", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
+        recordLog(user.id, "mood");
       }
       setMood(0);
       setStress(5);

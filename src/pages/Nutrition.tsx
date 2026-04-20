@@ -273,6 +273,7 @@ export default function Nutrition() {
       xpSources.push({ action: "Hit calorie target", xp: 10 });
     }
     awardXP(user.id, xpSources, (window as any).__healthquest_level_up).then(() => refreshProfile());
+    recordLog(user.id, "nutrition");
     fetchData();
   };
 
