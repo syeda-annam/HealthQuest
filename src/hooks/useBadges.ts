@@ -252,6 +252,8 @@ export async function checkBadges(userId: string, ctx: CheckCtx = {}) {
  */
 export async function recordLog(userId: string, module: import("./useStreaks").StreakModule) {
   const { updateStreak } = await import("./useStreaks");
+  const { updateChallengeProgress } = await import("./useChallenges");
   const { current } = await updateStreak(userId, module);
   await checkBadges(userId, { module, currentStreak: current });
+  await updateChallengeProgress(userId);
 }

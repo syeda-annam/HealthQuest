@@ -6,6 +6,7 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { ProgressRing } from "@/components/ProgressRing";
 import { DashboardXPCard } from "@/components/DashboardXPCard";
 import { DashboardStreaksRow } from "@/components/DashboardStreaksRow";
+import { ChallengesCard } from "@/components/ChallengesCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
