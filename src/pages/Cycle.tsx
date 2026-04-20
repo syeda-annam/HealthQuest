@@ -12,6 +12,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "@/hooks/use-toast";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { Heart, Settings, ChevronLeft, ChevronRight, Calendar } from "lucide-react";
 import {
   format, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths,
@@ -166,6 +168,7 @@ export default function Cycle() {
     } else {
       toast({ title: "Cycle log saved" });
       awardXP(user.id, [{ action: "Logged cycle", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
+      recordLog(user.id, "cycle");
       setModalOpen(false);
       fetchData();
     }
@@ -266,6 +269,7 @@ export default function Cycle() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="cycle" refreshKey={allLogs.length} />
       <div>
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
           <Heart className="h-6 w-6 text-secondary" /> Cycle Tracker

@@ -21,6 +21,8 @@ import { useToast } from "@/hooks/use-toast";
 import { awardXP, XPSource } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 
 interface WaterEntry {
   amount_ml: number;
@@ -166,7 +168,10 @@ export default function Water() {
         awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
       }
     }
-    if (user) updateGoalsForModule(user.id, "Water");
+    if (user) {
+      updateGoalsForModule(user.id, "Water");
+      recordLog(user.id, "water");
+    }
     fetchData();
   };
 
@@ -199,6 +204,7 @@ export default function Water() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="water" refreshKey={totalToday} />
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">

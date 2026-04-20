@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/contexts/ProfileContext";
 import { ProgressRing } from "@/components/ProgressRing";
 import { DashboardXPCard } from "@/components/DashboardXPCard";
+import { DashboardStreaksRow } from "@/components/DashboardStreaksRow";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -125,6 +126,8 @@ export default function Dashboard() {
           <ProgressRing value={moodToday} max={5} label="Mood" unit="/5" color="hsl(var(--accent))" />
         </CardContent>
       </Card>
+
+      <DashboardStreaksRow />
 
       <div className="grid gap-6 md:grid-cols-2">
         <DashboardXPCard level={level} totalXP={totalXPEarned} />

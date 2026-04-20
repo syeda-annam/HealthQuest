@@ -13,6 +13,8 @@ import { useToast } from "@/hooks/use-toast";
 import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP, XPSource } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 import {
@@ -273,6 +275,7 @@ export default function Nutrition() {
       xpSources.push({ action: "Hit calorie target", xp: 10 });
     }
     awardXP(user.id, xpSources, (window as any).__healthquest_level_up).then(() => refreshProfile());
+    recordLog(user.id, "nutrition");
     fetchData();
   };
 
@@ -343,6 +346,7 @@ export default function Nutrition() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="nutrition" refreshKey={todayLog?.meals.length || 0} />
       <div>
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground">Nutrition Tracker</h1>
         <p className="text-muted-foreground">{format(new Date(), "EEEE, MMMM d")}</p>

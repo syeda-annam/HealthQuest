@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Smile, Settings } from "lucide-react";
 import { format, subDays, eachDayOfInterval } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 import {
@@ -146,6 +148,7 @@ export default function Mood() {
       if (user) {
         updateGoalsForModule(user.id, "Mood");
         awardXP(user.id, [{ action: "Logged mood", xp: 5 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
+        recordLog(user.id, "mood");
       }
       setMood(0);
       setStress(5);
@@ -205,6 +208,7 @@ export default function Mood() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="mood" refreshKey={todayLogged ? 1 : 0} />
       {/* Header */}
       <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">
         <Smile className="h-6 w-6 text-secondary" />

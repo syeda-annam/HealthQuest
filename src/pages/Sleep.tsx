@@ -14,6 +14,8 @@ import {
 } from "recharts";
 import { useToast } from "@/hooks/use-toast";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP, XPSource } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 
@@ -160,6 +162,7 @@ export default function Sleep() {
       const sources: XPSource[] = [{ action: "Logged sleep", xp: 5 }];
       if (duration >= 7) sources.push({ action: "Slept 7+ hours", xp: 10 });
       awardXP(user.id, sources, (window as any).__healthquest_level_up).then(() => refreshProfile());
+      recordLog(user.id, "sleep");
       setBedtime("");
       setWakeTime("");
       setQuality(0);
@@ -192,6 +195,7 @@ export default function Sleep() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="sleep" refreshKey={todayLogged ? 1 : 0} />
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-2">
         <h1 className="text-2xl md:text-3xl font-heading font-extrabold text-foreground flex items-center gap-2">

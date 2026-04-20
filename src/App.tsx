@@ -21,6 +21,7 @@ import Goals from "./pages/Goals";
 import Cycle from "./pages/Cycle";
 import Insights from "./pages/Insights";
 import Settings from "./pages/Settings";
+import Badges from "./pages/Badges";
 
 initTheme();
 
@@ -46,6 +47,7 @@ const App = () => (
             <Route path="/cycle" element={<DashboardLayout><Cycle /></DashboardLayout>} />
             <Route path="/goals" element={<DashboardLayout><Goals /></DashboardLayout>} />
             <Route path="/insights" element={<DashboardLayout><Insights /></DashboardLayout>} />
+            <Route path="/badges" element={<DashboardLayout><Badges /></DashboardLayout>} />
             <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
             <Route path="*" element={<NotFound />} />
           </Routes>

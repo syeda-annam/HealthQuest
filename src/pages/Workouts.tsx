@@ -14,6 +14,8 @@ import { toast } from "@/hooks/use-toast";
 import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
+import { recordLog } from "@/hooks/useBadges";
+import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
@@ -213,6 +215,7 @@ export default function Workouts() {
       toast({ title: "Workout logged!" });
       updateGoalsForModule(user.id, "Workout");
       awardXP(user.id, [{ action: "Logged workout", xp: 15 }], (window as any).__healthquest_level_up).then(() => refreshProfile());
+      recordLog(user.id, "workout");
       setExercises([]);
       setDuration("");
       setDistance("");
@@ -272,6 +275,7 @@ export default function Workouts() {
 
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
+      <StreakBanner module="workout" refreshKey={workoutHistory.length} />
       <div className="flex items-center justify-between">
           <h1 className="text-2xl font-heading font-extrabold flex items-center gap-2">
             <Dumbbell className="h-6 w-6 text-secondary" /> Workout Tracker
