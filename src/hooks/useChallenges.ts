@@ -246,8 +246,9 @@ export async function updateChallengeProgress(userId: string) {
 /** Cache the week's challenges in `weekly_challenges` (idempotent). */
 export async function ensureWeeklyChallengeRow(weekStart: string) {
   const defs = getChallengesForWeek(weekStart);
+  const payload = JSON.parse(JSON.stringify(defs));
   await supabase.from("weekly_challenges").upsert(
-    [{ week_start: weekStart, challenges: defs as unknown as object[] }],
+    [{ week_start: weekStart, challenges: payload }],
     { onConflict: "week_start" },
   );
 }
