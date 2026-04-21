@@ -18,11 +18,13 @@ async function checkAndCelebrateMilestones(goal: Goal, newValue: number) {
   const pct = goal.target_value > 0 ? (newValue / goal.target_value) * 100 : 0;
   const milestones = { ...(goal.milestones || { "25": false, "50": false, "75": false, "100": false }) };
   let celebrated = false;
+  let hitHundred = false;
 
   for (const threshold of ["25", "50", "75", "100"] as const) {
     if (pct >= Number(threshold) && !milestones[threshold]) {
       milestones[threshold] = true;
       celebrated = true;
+      if (threshold === "100") hitHundred = true;
       toast({
         title: `🎉 ${threshold}% Milestone!`,
         description: threshold === "100"
@@ -33,7 +35,7 @@ async function checkAndCelebrateMilestones(goal: Goal, newValue: number) {
   }
 
   if (celebrated) {
-    confetti({ particleCount: threshold100Reached(pct) ? 200 : 100, spread: 70, origin: { y: 0.6 } });
+    confetti({ particleCount: hitHundred ? 200 : 100, spread: 70, origin: { y: 0.6 } });
   }
 
   const isComplete = newValue >= goal.target_value;
@@ -51,10 +53,6 @@ async function checkAndCelebrateMilestones(goal: Goal, newValue: number) {
       awardXP(goalData.user_id, [{ action: "Completed a goal", xp: 50 }], (window as any).__healthquest_level_up);
     }
   }
-}
-
-function threshold100Reached(pct: number) {
-  return pct >= 100;
 }
 
 export async function updateGoalsForModule(userId: string, module: string) {
