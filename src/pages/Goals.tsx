@@ -27,7 +27,6 @@ const MODULES = [
 
 const GOAL_TYPES = [
   { value: "numeric", label: "Numeric Target", desc: "Reach a specific number (e.g. 70kg body weight)" },
-  { value: "streak", label: "Streak Goal", desc: "Maintain consistency over weeks (e.g. 4 workouts/week for 8 weeks)" },
   { value: "habit", label: "Habit Goal", desc: "Hit a daily target for X consecutive days" },
   { value: "milestone", label: "Milestone Goal", desc: "Accumulate a total count (e.g. 50 total workouts)" },
 ];
