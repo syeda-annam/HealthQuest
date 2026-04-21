@@ -95,6 +95,30 @@ export type Database = {
         }
         Relationships: []
       }
+      friends: {
+        Row: {
+          created_at: string
+          friend_id: string
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          friend_id: string
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          friend_id?: string
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string | null
@@ -218,6 +242,7 @@ export type Database = {
           goal: string | null
           height: number | null
           id: string
+          leaderboard_opt_in: boolean
           level: number
           module_cycle: boolean | null
           module_mood: boolean | null
@@ -237,6 +262,7 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id: string
+          leaderboard_opt_in?: boolean
           level?: number
           module_cycle?: boolean | null
           module_mood?: boolean | null
@@ -256,6 +282,7 @@ export type Database = {
           goal?: string | null
           height?: number | null
           id?: string
+          leaderboard_opt_in?: boolean
           level?: number
           module_cycle?: boolean | null
           module_mood?: boolean | null
@@ -526,7 +553,45 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_friends_leaderboard: {
+        Args: never
+        Returns: {
+          badge_count: number
+          display_name: string
+          level: number
+          streak_sum: number
+          total_xp_earned: number
+          user_id: string
+        }[]
+      }
+      get_global_leaderboard: {
+        Args: never
+        Returns: {
+          badge_count: number
+          display_name: string
+          level: number
+          total_xp_earned: number
+          user_id: string
+          weekly_xp: number
+        }[]
+      }
+      get_my_global_rank: { Args: never; Returns: number }
+      get_pending_friend_requests: {
+        Args: never
+        Returns: {
+          created_at: string
+          request_id: string
+          sender_id: string
+          sender_name: string
+        }[]
+      }
+      search_users_for_friend: {
+        Args: { _query: string }
+        Returns: {
+          display_name: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
