@@ -55,10 +55,6 @@ async function checkAndCelebrateMilestones(goal: Goal, newValue: number) {
   }
 }
 
-function threshold100Reached(pct: number) {
-  return pct >= 100;
-}
-
 export async function updateGoalsForModule(userId: string, module: string) {
   const { data: goals } = await supabase
     .from("goals")
