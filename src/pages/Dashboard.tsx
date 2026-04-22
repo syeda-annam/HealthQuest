@@ -125,46 +125,6 @@ export default function Dashboard() {
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" />
-              Active Goals
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {activeGoals.length === 0 ? (
-              <div className="text-center py-4">
-                <p className="text-sm text-muted-foreground">You haven't set any goals yet. Goals give your tracking purpose.</p>
-                <Button variant="outline" className="text-sm mt-3" onClick={() => navigate("/goals")}>
-                  Create your first goal →
-                </Button>
-              </div>
-            ) : (
-              activeGoals.map((goal) => {
-                const pct = goal.target_value > 0 ? Math.min(Math.round((goal.current_value / goal.target_value) * 100), 100) : 0;
-                const daysLeft = goal.target_date ? differenceInDays(new Date(goal.target_date), new Date()) : null;
-                return (
-                  <div key={goal.id} className="rounded-lg border border-border p-3 space-y-2 border-l-4 border-l-secondary">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-foreground truncate">{goal.title}</span>
-                      <span className="text-xs text-muted-foreground font-medium">{pct}%</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-muted">
-                      <div className="h-2 rounded-full bg-secondary transition-all" style={{ width: `${pct}%` }} />
-                    </div>
-                    {daysLeft !== null && (
-                      <p className={`text-xs ${daysLeft < 0 ? "text-destructive" : "text-muted-foreground"}`}>
-                        {daysLeft < 0 ? `${Math.abs(daysLeft)}d overdue` : `${daysLeft}d left`}
-                      </p>
-                    )}
-                  </div>
-                );
-              })
-            )}
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
               <Lightbulb className="h-5 w-5 text-highlight" />
               AI Insights
             </CardTitle>
