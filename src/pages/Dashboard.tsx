@@ -10,8 +10,8 @@ import { ChallengesCard } from "@/components/ChallengesCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Droplets, Moon, Smile, Lightbulb, Target, Dumbbell, UtensilsCrossed } from "lucide-react";
-import { format, subDays, differenceInDays } from "date-fns";
+import { Droplets, Moon, Smile, Lightbulb, Dumbbell, UtensilsCrossed } from "lucide-react";
+import { format } from "date-fns";
 
 interface Targets {
   calories: number;
@@ -20,15 +20,6 @@ interface Targets {
   carbs: number;
   water: number;
   sleep: number;
-}
-
-interface GoalData {
-  id: string;
-  title: string;
-  module: string;
-  target_value: number;
-  current_value: number;
-  target_date: string | null;
 }
 
 export default function Dashboard() {
@@ -42,7 +33,6 @@ export default function Dashboard() {
   const [moodToday, setMoodToday] = useState(0);
   const [caloriesToday, setCaloriesToday] = useState(0);
   const [workoutToday, setWorkoutToday] = useState(false);
-  const [activeGoals, setActiveGoals] = useState<GoalData[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +42,7 @@ export default function Dashboard() {
       setLoading(true);
       const today = format(new Date(), "yyyy-MM-dd");
 
-      const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes, workoutRes, goalsRes] = await Promise.all([
+      const [profileRes, targetRes, waterRes, sleepRes, moodRes, nutritionRes, workoutRes] = await Promise.all([
         supabase.from("profiles").select("name").eq("id", user.id).single(),
         supabase.from("targets").select("*").eq("user_id", user.id).single(),
         supabase.from("water_logs").select("daily_total").eq("user_id", user.id).eq("logged_date", today).single(),
@@ -60,7 +50,6 @@ export default function Dashboard() {
         supabase.from("mood_logs").select("mood").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("nutrition_logs").select("total_calories").eq("user_id", user.id).eq("logged_date", today).single(),
         supabase.from("workout_logs").select("id").eq("user_id", user.id).eq("logged_date", today).limit(1),
-        supabase.from("goals").select("id, title, module, target_value, current_value, target_date").eq("user_id", user.id).eq("status", "active").limit(3),
       ]);
 
       setName(profileRes.data?.name || "");
@@ -79,7 +68,6 @@ export default function Dashboard() {
       setMoodToday(Number(moodRes.data?.mood || 0));
       setCaloriesToday(Number(nutritionRes.data?.total_calories || 0));
       setWorkoutToday((workoutRes.data?.length || 0) > 0);
-      setActiveGoals((goalsRes.data as unknown as GoalData[]) || []);
       setLoading(false);
     };
 
