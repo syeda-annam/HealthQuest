@@ -17,7 +17,6 @@ import Sleep from "./pages/Sleep";
 import Mood from "./pages/Mood";
 import Nutrition from "./pages/Nutrition";
 import Workouts from "./pages/Workouts";
-import Goals from "./pages/Goals";
 import Cycle from "./pages/Cycle";
 import Insights from "./pages/Insights";
 import Settings from "./pages/Settings";
@@ -47,7 +46,6 @@ const App = () => (
             <Route path="/water" element={<DashboardLayout><Water /></DashboardLayout>} />
             <Route path="/mood" element={<DashboardLayout><Mood /></DashboardLayout>} />
             <Route path="/cycle" element={<DashboardLayout><Cycle /></DashboardLayout>} />
-            <Route path="/goals" element={<DashboardLayout><Goals /></DashboardLayout>} />
             <Route path="/insights" element={<DashboardLayout><Insights /></DashboardLayout>} />
             <Route path="/badges" element={<DashboardLayout><Badges /></DashboardLayout>} />
             <Route path="/challenges" element={<DashboardLayout><Challenges /></DashboardLayout>} />

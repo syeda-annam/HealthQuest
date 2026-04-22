@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard, Dumbbell, UtensilsCrossed, Moon, Droplets,
-  Smile, Heart, Target, Lightbulb, Settings,
+  Smile, Heart, Lightbulb, Settings,
 } from "lucide-react";
 
 interface MobileNavProps {
@@ -18,7 +18,6 @@ export function MobileNav({ moduleCycle, moduleMood }: MobileNavProps) {
     { title: "Water", url: "/water", icon: Droplets },
     ...(moduleMood ? [{ title: "Mood", url: "/mood", icon: Smile }] : []),
     ...(moduleCycle ? [{ title: "Cycle", url: "/cycle", icon: Heart }] : []),
-    { title: "Goals", url: "/goals", icon: Target },
     { title: "Insights", url: "/insights", icon: Lightbulb },
     { title: "Settings", url: "/settings", icon: Settings },
   ];
