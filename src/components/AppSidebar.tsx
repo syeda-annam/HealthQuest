@@ -40,9 +40,9 @@ export function AppSidebar({ moduleCycle, moduleMood, level, totalXP, name }: Ap
 
   return (
     <Sidebar collapsible="icon" className="border-r-0 bg-sidebar" style={{ width: collapsed ? undefined : "240px" }}>
-      <SidebarContent className="pt-6">
+      <SidebarContent className="pt-0">
         {!collapsed && (
-          <div className="px-5 pb-4 mb-2 border-b border-sidebar-border">
+          <div className="px-5 h-16 flex items-center border-b border-sidebar-border">
             <span className="font-heading text-[1.3rem] text-sidebar-foreground tracking-tight">
               HealthQuest
             </span>
