@@ -163,18 +163,41 @@ export default function Nutrition() {
   const searchFood = async () => {
     if (!searchQuery.trim()) return;
     setSearching(true);
+    const q = encodeURIComponent(searchQuery);
+
+    // Fetch helper with 15s timeout + up to 3 retries (500ms delay between attempts)
+    const fetchWithRetry = async (url: string, retries = 3): Promise<Response> => {
+      let lastErr: unknown;
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res;
+        } catch (err) {
+          clearTimeout(timeoutId);
+          lastErr = err;
+          if (attempt < retries) {
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+      }
+      throw lastErr;
+    };
+
     try {
-      const q = encodeURIComponent(searchQuery);
       // Primary: world DB sorted by popularity (most-scanned first)
       const primaryUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20&sort_by=unique_scans_n`;
-      const res = await fetch(primaryUrl);
+      const res = await fetchWithRetry(primaryUrl);
       const data = await res.json();
       let products: FoodResult[] = data.products || [];
 
       // Fallback 1: widen world search (no sort) if too few results
       if (products.length < 3) {
         try {
-          const wideRes = await fetch(
+          const wideRes = await fetchWithRetry(
             `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
           );
           const wideData = await wideRes.json();
@@ -189,7 +212,7 @@ export default function Nutrition() {
       // Fallback 2: try the India-specific DB if still nothing (great for Indian foods)
       if (products.length === 0) {
         try {
-          const inRes = await fetch(
+          const inRes = await fetchWithRetry(
             `https://in.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
           );
           const inData = await inRes.json();
@@ -199,7 +222,11 @@ export default function Nutrition() {
 
       setSearchResults(products);
     } catch {
-      toast({ title: "Search failed", description: "Could not reach food database.", variant: "destructive" });
+      toast({
+        title: "Search failed",
+        description: "Food database is slow right now. Please try again in a moment.",
+        variant: "destructive",
+      });
     }
     setSearching(false);
   };
