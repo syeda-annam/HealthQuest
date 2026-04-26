@@ -438,9 +438,19 @@ export default function Workouts() {
         {/* Monthly Heatmap */}
         <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle className="text-lg font-heading flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" /> Monthly Consistency
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-heading flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" /> {format(heatmapMonth, "MMMM yyyy")}
+              </CardTitle>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" onClick={() => setHeatmapMonth(subMonths(heatmapMonth, 1))}>
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => setHeatmapMonth(addMonths(heatmapMonth, 1))} disabled={format(heatmapMonth, "yyyy-MM") >= format(new Date(), "yyyy-MM")}>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-7 gap-1">
@@ -448,7 +458,7 @@ export default function Workouts() {
                 <div key={i} className="text-center text-xs text-muted-foreground font-medium">{d}</div>
               ))}
               {/* Padding for first day */}
-              {Array.from({ length: startOfMonth(new Date()).getDay() }).map((_, i) => (
+              {Array.from({ length: startOfMonth(heatmapMonth).getDay() }).map((_, i) => (
                 <div key={`pad-${i}`} />
               ))}
               {heatmapData.map((day, i) => (
@@ -489,47 +499,6 @@ export default function Workouts() {
           </CardContent>
         </Card>
       </div>
-
-      {/* PR Progression */}
-      <Card className="border-border bg-card">
-        <CardHeader>
-          <CardTitle className="text-lg font-heading">PR Progression</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {allExerciseNames.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm">
-              Log strength exercises to track your personal records over time.
-            </div>
-          ) : (
-            <>
-              <Select value={selectedExercise} onValueChange={setSelectedExercise}>
-                <SelectTrigger className="w-64 mb-4">
-                  <SelectValue placeholder="Select exercise" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allExerciseNames.map((name) => (
-                    <SelectItem key={name} value={name}>{name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {prData.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground text-sm">
-                  {selectedExercise ? "No data for this exercise yet." : "Select an exercise to see PR progression."}
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={prData}>
-                    <XAxis dataKey="date" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                    <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                    <Line type="monotone" dataKey="maxWeight" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: "hsl(var(--primary))" }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              )}
-            </>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Template Modal */}
       <Dialog open={templateModalOpen} onOpenChange={setTemplateModalOpen}>
