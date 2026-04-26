@@ -319,7 +319,6 @@ export default function Insights() {
                 <span className="text-lg text-muted-foreground ml-1">/100</span>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground text-center">Sleep 25% · Nutrition 25% · Workouts 20% · Water 15% · Mood 15%</p>
           </CardContent>
         </Card>
 
