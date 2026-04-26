@@ -18,7 +18,7 @@ import { recordLog } from "@/hooks/useBadges";
 import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
+import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Sports", "Custom"];
 const MUSCLE_GROUPS = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
