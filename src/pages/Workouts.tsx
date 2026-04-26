@@ -11,14 +11,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
-import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
+import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks, addMonths, subMonths } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { recordLog } from "@/hooks/useBadges";
 import { StreakBanner } from "@/components/StreakBanner";
 import { awardXP } from "@/hooks/useXP";
 import { useProfile } from "@/contexts/ProfileContext";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
+import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from "recharts";
 
 const WORKOUT_TYPES = ["Strength", "Cardio", "HIIT", "Yoga", "Sports", "Custom"];
 const MUSCLE_GROUPS = ["Chest", "Back", "Legs", "Shoulders", "Arms", "Core"];
@@ -70,17 +70,15 @@ export default function Workouts() {
 
   // Chart data
   const [heatmapData, setHeatmapData] = useState<{ date: Date; logged: boolean }[]>([]);
-  const [allExerciseNames, setAllExerciseNames] = useState<string[]>([]);
-  const [selectedExercise, setSelectedExercise] = useState("");
-  const [prData, setPrData] = useState<{ date: string; maxWeight: number }[]>([]);
+  const [heatmapMonth, setHeatmapMonth] = useState<Date>(new Date());
   const [radarData, setRadarData] = useState<{ muscle: string; volume: number }[]>([]);
 
   const fetchData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     const today = format(new Date(), "yyyy-MM-dd");
-    const monthStart = format(startOfMonth(new Date()), "yyyy-MM-dd");
-    const monthEnd = format(endOfMonth(new Date()), "yyyy-MM-dd");
+    const monthStart = format(startOfMonth(heatmapMonth), "yyyy-MM-dd");
+    const monthEnd = format(endOfMonth(heatmapMonth), "yyyy-MM-dd");
     const fourWeeksAgo = format(subWeeks(new Date(), 4), "yyyy-MM-dd");
 
     const [profileRes, templateRes, logsMonthRes, allLogsRes] = await Promise.all([
@@ -98,66 +96,32 @@ export default function Workouts() {
     setWorkoutHistory(allLogs);
 
     // Build heatmap
-    const monthDays = eachDayOfInterval({ start: startOfMonth(new Date()), end: endOfMonth(new Date()) });
+    const monthDays = eachDayOfInterval({ start: startOfMonth(heatmapMonth), end: endOfMonth(heatmapMonth) });
     const loggedDates = (logsMonthRes.data || []).map((l) => l.logged_date);
     setHeatmapData(monthDays.map((d) => ({ date: d, logged: loggedDates.includes(format(d, "yyyy-MM-dd")) })));
 
-    // Extract all exercise names and compute radar/PR data from recent logs
+    // Compute radar volumes from recent logs
     const fourWeeksAgoLogs = allLogs.filter(l => l.logged_date >= fourWeeksAgo);
-    const exerciseNamesSet = new Set<string>();
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
 
     fourWeeksAgoLogs.forEach((log) => {
       const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
       exercisesArr.forEach((ex: Exercise) => {
-        if (ex.name) exerciseNamesSet.add(ex.name);
         if (ex.muscle_group && MUSCLE_GROUPS.includes(ex.muscle_group)) {
           const vol = (ex.sets || []).reduce((sum, s) => sum + (s.reps || 0) * (s.weight || 0), 0);
           muscleVolumes[ex.muscle_group] += vol;
         }
       });
     });
-    // Also collect exercise names from ALL logs for PR tracking
-    allLogs.forEach((log) => {
-      const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
-      exercisesArr.forEach((ex: Exercise) => {
-        if (ex.name) exerciseNamesSet.add(ex.name);
-      });
-    });
 
-    setAllExerciseNames(Array.from(exerciseNamesSet));
     setRadarData(MUSCLE_GROUPS.map((m) => ({ muscle: m, volume: muscleVolumes[m] })));
     setLoading(false);
-  }, [user]);
+  }, [user, heatmapMonth]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  // Fetch PR data when selected exercise changes
-  useEffect(() => {
-    if (!user || !selectedExercise) {
-      setPrData([]);
-      return;
-    }
-    const fetchPR = async () => {
-      const { data } = await supabase.from("workout_logs").select("logged_date, exercises").eq("user_id", user.id).order("logged_date", { ascending: true });
-      if (!data) return;
-      const prPoints: { date: string; maxWeight: number }[] = [];
-      data.forEach((log) => {
-        const exercisesArr = Array.isArray(log.exercises) ? (log.exercises as unknown as Exercise[]) : [];
-        exercisesArr.forEach((ex) => {
-          if (ex.name === selectedExercise) {
-            const maxW = Math.max(...(ex.sets || []).map((s) => s.weight || 0), 0);
-            if (maxW > 0) prPoints.push({ date: log.logged_date, maxWeight: maxW });
-          }
-        });
-      });
-      setPrData(prPoints);
-    };
-    fetchPR();
-  }, [user, selectedExercise]);
 
   const addExercise = () => {
     if (!exerciseName.trim()) return;
@@ -474,9 +438,19 @@ export default function Workouts() {
         {/* Monthly Heatmap */}
         <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle className="text-lg font-heading flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-primary" /> Monthly Consistency
-            </CardTitle>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-lg font-heading flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-primary" /> {format(heatmapMonth, "MMMM yyyy")}
+              </CardTitle>
+              <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" onClick={() => setHeatmapMonth(subMonths(heatmapMonth, 1))}>
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={() => setHeatmapMonth(addMonths(heatmapMonth, 1))} disabled={format(heatmapMonth, "yyyy-MM") >= format(new Date(), "yyyy-MM")}>
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-7 gap-1">
@@ -484,7 +458,7 @@ export default function Workouts() {
                 <div key={i} className="text-center text-xs text-muted-foreground font-medium">{d}</div>
               ))}
               {/* Padding for first day */}
-              {Array.from({ length: startOfMonth(new Date()).getDay() }).map((_, i) => (
+              {Array.from({ length: startOfMonth(heatmapMonth).getDay() }).map((_, i) => (
                 <div key={`pad-${i}`} />
               ))}
               {heatmapData.map((day, i) => (
@@ -525,47 +499,6 @@ export default function Workouts() {
           </CardContent>
         </Card>
       </div>
-
-      {/* PR Progression */}
-      <Card className="border-border bg-card">
-        <CardHeader>
-          <CardTitle className="text-lg font-heading">PR Progression</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {allExerciseNames.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm">
-              Log strength exercises to track your personal records over time.
-            </div>
-          ) : (
-            <>
-              <Select value={selectedExercise} onValueChange={setSelectedExercise}>
-                <SelectTrigger className="w-64 mb-4">
-                  <SelectValue placeholder="Select exercise" />
-                </SelectTrigger>
-                <SelectContent>
-                  {allExerciseNames.map((name) => (
-                    <SelectItem key={name} value={name}>{name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {prData.length === 0 ? (
-                <div className="text-center py-8 text-muted-foreground text-sm">
-                  {selectedExercise ? "No data for this exercise yet." : "Select an exercise to see PR progression."}
-                </div>
-              ) : (
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={prData}>
-                    <XAxis dataKey="date" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                    <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
-                    <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))" }} />
-                    <Line type="monotone" dataKey="maxWeight" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: "hsl(var(--primary))" }} />
-                  </LineChart>
-                </ResponsiveContainer>
-              )}
-            </>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Template Modal */}
       <Dialog open={templateModalOpen} onOpenChange={setTemplateModalOpen}>

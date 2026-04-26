@@ -59,7 +59,7 @@ export default function Cycle() {
   const [avgCycleLength, setAvgCycleLength] = useState(28);
   const [currentCycleDay, setCurrentCycleDay] = useState<number | null>(null);
   const [nextPeriodDate, setNextPeriodDate] = useState<Date | null>(null);
-  const [cycleLengthHistory, setCycleLengthHistory] = useState<{ cycle: number; length: number }[]>([]);
+  const [cycleLengthHistory, setCycleLengthHistory] = useState<{ month: string; length: number }[]>([]);
   const [symptomFrequency, setSymptomFrequency] = useState<{ symptom: string; count: number }[]>([]);
 
   const fetchData = useCallback(async () => {
@@ -95,12 +95,16 @@ export default function Cycle() {
       }
     }
 
-    // Cycle lengths
-    const lengths: number[] = [];
+    // Cycle lengths labelled by the month the cycle started in
+    const lengthsWithMonth: { month: string; length: number }[] = [];
     for (let i = 1; i < cycleStarts.length; i++) {
-      lengths.push(differenceInDays(cycleStarts[i], cycleStarts[i - 1]));
+      lengthsWithMonth.push({
+        month: format(cycleStarts[i - 1], "MMM yyyy"),
+        length: differenceInDays(cycleStarts[i], cycleStarts[i - 1]),
+      });
     }
-    setCycleLengthHistory(lengths.map((l, i) => ({ cycle: i + 1, length: l })));
+    setCycleLengthHistory(lengthsWithMonth);
+    const lengths = lengthsWithMonth.map(x => x.length);
 
     const avg = lengths.length >= 2 ? Math.round(lengths.reduce((s, l) => s + l, 0) / lengths.length) : 28;
     setAvgCycleLength(avg);
@@ -365,7 +369,7 @@ export default function Cycle() {
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart data={cycleLengthHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                  <XAxis dataKey="cycle" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} label={{ value: "Cycle #", position: "insideBottom", offset: -5, fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
+                  <XAxis dataKey="month" tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                   <YAxis tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }} />
                   <Tooltip contentStyle={{ background: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: 8, color: "hsl(var(--foreground))" }} />
                   <Line type="monotone" dataKey="length" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ fill: "hsl(var(--primary))" }} />

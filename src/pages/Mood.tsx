@@ -56,7 +56,8 @@ export default function Mood() {
   // Chart data
   const [moodTrend, setMoodTrend] = useState<{ day: string; mood: number }[]>([]);
   const [stressHeatmap, setStressHeatmap] = useState<{ date: string; day: string; stress: number }[]>([]);
-  const [sleepMoodScatter, setSleepMoodScatter] = useState<{ sleep: number; mood: number }[]>([]);
+  const [sleepMoodScatter, setSleepMoodScatter] = useState<{ sleep: number; mood: number; sleepRatio: number }[]>([]);
+  const [sleepTarget, setSleepTarget] = useState(7.5);
   const [tagFrequency, setTagFrequency] = useState<{ tag: string; count: number }[]>([]);
 
   const today = format(new Date(), "yyyy-MM-dd");
@@ -78,13 +79,17 @@ export default function Mood() {
 
     const thirtyAgo = format(subDays(new Date(), 29), "yyyy-MM-dd");
 
-    const [logsRes, todayRes, sleepRes] = await Promise.all([
+    const [logsRes, todayRes, sleepRes, targetRes] = await Promise.all([
       supabase.from("mood_logs").select("*").eq("user_id", user.id)
         .gte("logged_date", thirtyAgo).order("logged_date", { ascending: true }),
       supabase.from("mood_logs").select("id").eq("user_id", user.id).eq("logged_date", today).single(),
       supabase.from("sleep_logs").select("logged_date, duration_hours").eq("user_id", user.id)
         .gte("logged_date", thirtyAgo),
+      supabase.from("targets").select("sleep").eq("user_id", user.id).maybeSingle(),
     ]);
+
+    const target = targetRes.data?.sleep ? Number(targetRes.data.sleep) : 7.5;
+    setSleepTarget(target);
 
     setTodayLogged(!!todayRes.data);
     const logs = logsRes.data || [];
@@ -108,7 +113,14 @@ export default function Mood() {
     const sleepMap = new Map((sleepRes.data || []).map((s: any) => [s.logged_date, Number(s.duration_hours)]));
     const scatter = logs
       .filter((l: any) => l.mood && sleepMap.has(l.logged_date))
-      .map((l: any) => ({ sleep: sleepMap.get(l.logged_date)!, mood: Number(l.mood) }));
+      .map((l: any) => {
+        const slept = sleepMap.get(l.logged_date)!;
+        return {
+          sleep: slept,
+          mood: Number(l.mood),
+          sleepRatio: target > 0 ? +(slept / target).toFixed(2) : 0,
+        };
+      });
     setSleepMoodScatter(scatter);
 
     // Tag frequency (all time from these logs)
@@ -381,7 +393,17 @@ export default function Mood() {
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
                   <XAxis dataKey="sleep" name="Sleep" unit="h" stroke="hsl(var(--muted-foreground))" fontSize={12} />
                   <YAxis dataKey="mood" name="Mood" domain={[0, 5]} stroke="hsl(var(--muted-foreground))" fontSize={12} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v: number, name: string) => [name === "sleep" ? `${v}h` : `${v}/5`, name === "sleep" ? "Sleep" : "Mood"]} />
+                  <Tooltip
+                    contentStyle={tooltipStyle}
+                    cursor={{ strokeDasharray: "3 3" }}
+                    formatter={(v: number, name: string, props: any) => {
+                      if (name === "sleep") {
+                        const ratio = props?.payload?.sleepRatio;
+                        return [`${v}h (${Math.round((ratio || 0) * 100)}% of target)`, "Sleep"];
+                      }
+                      return [`${v}/5`, "Mood"];
+                    }}
+                  />
                   <Scatter data={sleepMoodScatter} fill="hsl(var(--primary))">
                     {sleepMoodScatter.map((_, i) => (
                       <Cell key={i} fill="hsl(var(--primary))" />
