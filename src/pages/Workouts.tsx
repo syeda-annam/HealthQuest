@@ -11,8 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "@/hooks/use-toast";
-import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks } from "date-fns";
+import { Dumbbell, Plus, Trash2, Save, FolderOpen, Clock, Heart, Route, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, subWeeks, addMonths, subMonths } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { recordLog } from "@/hooks/useBadges";
 import { StreakBanner } from "@/components/StreakBanner";
@@ -70,17 +70,15 @@ export default function Workouts() {
 
   // Chart data
   const [heatmapData, setHeatmapData] = useState<{ date: Date; logged: boolean }[]>([]);
-  const [allExerciseNames, setAllExerciseNames] = useState<string[]>([]);
-  const [selectedExercise, setSelectedExercise] = useState("");
-  const [prData, setPrData] = useState<{ date: string; maxWeight: number }[]>([]);
+  const [heatmapMonth, setHeatmapMonth] = useState<Date>(new Date());
   const [radarData, setRadarData] = useState<{ muscle: string; volume: number }[]>([]);
 
   const fetchData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     const today = format(new Date(), "yyyy-MM-dd");
-    const monthStart = format(startOfMonth(new Date()), "yyyy-MM-dd");
-    const monthEnd = format(endOfMonth(new Date()), "yyyy-MM-dd");
+    const monthStart = format(startOfMonth(heatmapMonth), "yyyy-MM-dd");
+    const monthEnd = format(endOfMonth(heatmapMonth), "yyyy-MM-dd");
     const fourWeeksAgo = format(subWeeks(new Date(), 4), "yyyy-MM-dd");
 
     const [profileRes, templateRes, logsMonthRes, allLogsRes] = await Promise.all([
@@ -98,66 +96,32 @@ export default function Workouts() {
     setWorkoutHistory(allLogs);
 
     // Build heatmap
-    const monthDays = eachDayOfInterval({ start: startOfMonth(new Date()), end: endOfMonth(new Date()) });
+    const monthDays = eachDayOfInterval({ start: startOfMonth(heatmapMonth), end: endOfMonth(heatmapMonth) });
     const loggedDates = (logsMonthRes.data || []).map((l) => l.logged_date);
     setHeatmapData(monthDays.map((d) => ({ date: d, logged: loggedDates.includes(format(d, "yyyy-MM-dd")) })));
 
-    // Extract all exercise names and compute radar/PR data from recent logs
+    // Compute radar volumes from recent logs
     const fourWeeksAgoLogs = allLogs.filter(l => l.logged_date >= fourWeeksAgo);
-    const exerciseNamesSet = new Set<string>();
     const muscleVolumes: Record<string, number> = {};
     MUSCLE_GROUPS.forEach((m) => (muscleVolumes[m] = 0));
 
     fourWeeksAgoLogs.forEach((log) => {
       const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
       exercisesArr.forEach((ex: Exercise) => {
-        if (ex.name) exerciseNamesSet.add(ex.name);
         if (ex.muscle_group && MUSCLE_GROUPS.includes(ex.muscle_group)) {
           const vol = (ex.sets || []).reduce((sum, s) => sum + (s.reps || 0) * (s.weight || 0), 0);
           muscleVolumes[ex.muscle_group] += vol;
         }
       });
     });
-    // Also collect exercise names from ALL logs for PR tracking
-    allLogs.forEach((log) => {
-      const exercisesArr = Array.isArray(log.exercises) ? log.exercises : [];
-      exercisesArr.forEach((ex: Exercise) => {
-        if (ex.name) exerciseNamesSet.add(ex.name);
-      });
-    });
 
-    setAllExerciseNames(Array.from(exerciseNamesSet));
     setRadarData(MUSCLE_GROUPS.map((m) => ({ muscle: m, volume: muscleVolumes[m] })));
     setLoading(false);
-  }, [user]);
+  }, [user, heatmapMonth]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  // Fetch PR data when selected exercise changes
-  useEffect(() => {
-    if (!user || !selectedExercise) {
-      setPrData([]);
-      return;
-    }
-    const fetchPR = async () => {
-      const { data } = await supabase.from("workout_logs").select("logged_date, exercises").eq("user_id", user.id).order("logged_date", { ascending: true });
-      if (!data) return;
-      const prPoints: { date: string; maxWeight: number }[] = [];
-      data.forEach((log) => {
-        const exercisesArr = Array.isArray(log.exercises) ? (log.exercises as unknown as Exercise[]) : [];
-        exercisesArr.forEach((ex) => {
-          if (ex.name === selectedExercise) {
-            const maxW = Math.max(...(ex.sets || []).map((s) => s.weight || 0), 0);
-            if (maxW > 0) prPoints.push({ date: log.logged_date, maxWeight: maxW });
-          }
-        });
-      });
-      setPrData(prPoints);
-    };
-    fetchPR();
-  }, [user, selectedExercise]);
 
   const addExercise = () => {
     if (!exerciseName.trim()) return;
