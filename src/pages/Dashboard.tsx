@@ -10,7 +10,7 @@ import { ChallengesCard } from "@/components/ChallengesCard";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Droplets, Moon, Smile, Lightbulb, Dumbbell, UtensilsCrossed } from "lucide-react";
+import { Droplets, Moon, Smile, Dumbbell, UtensilsCrossed } from "lucide-react";
 import { format } from "date-fns";
 
 interface Targets {
@@ -122,22 +122,6 @@ export default function Dashboard() {
 
       <div className="grid gap-6 md:grid-cols-2">
         <DashboardXPCard level={level} totalXP={totalXPEarned} />
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base font-heading font-semibold flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-highlight" />
-              AI Insights
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="rounded-lg border border-dashed border-border p-6 text-center">
-              <Lightbulb className="h-10 w-10 mx-auto text-muted-foreground/30 mb-3" />
-               <p className="text-sm text-muted-foreground">
-                 Log a few more days and I'll start uncovering patterns across your sleep, mood, and nutrition.
-               </p>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       <Card>
@@ -163,16 +147,6 @@ export default function Dashboard() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base font-heading font-semibold">Recent Activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-6">
-            <p className="text-sm text-muted-foreground">Your activity feed will show up here as you log throughout the day.</p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }
