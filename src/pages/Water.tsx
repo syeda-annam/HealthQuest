@@ -23,6 +23,7 @@ import { useProfile } from "@/contexts/ProfileContext";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { recordLog } from "@/hooks/useBadges";
 import { StreakBanner } from "@/components/StreakBanner";
+import { calculateTargets } from "@/lib/targets";
 
 interface WaterEntry {
   amount_ml: number;
@@ -56,13 +57,35 @@ export default function Water() {
     if (!user) return;
     setLoading(true);
 
-    // Fetch target
+    // Fetch target (and profile, in case targets are missing or stale)
     const { data: targetData } = await supabase
       .from("targets")
       .select("water")
       .eq("user_id", user.id)
-      .single();
-    if (targetData?.water) setGoal(Number(targetData.water));
+      .maybeSingle();
+
+    let waterGoalVal = targetData?.water ? Number(targetData.water) : 0;
+
+    // If no target row or no water value, derive from profile and seed it
+    if (!waterGoalVal) {
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("date_of_birth, biological_sex, height, weight, units, activity_level, goal")
+        .eq("id", user.id)
+        .single();
+
+      if (profileData?.weight && profileData?.height && profileData?.date_of_birth) {
+        const computed = calculateTargets(profileData as any);
+        waterGoalVal = computed.water;
+        await supabase.from("targets").upsert(
+          { user_id: user.id, ...computed },
+          { onConflict: "user_id" }
+        );
+      } else {
+        waterGoalVal = 2500;
+      }
+    }
+    setGoal(waterGoalVal);
 
     // Fetch today's log
     const { data: todayData } = await supabase
@@ -101,7 +124,7 @@ export default function Water() {
     setWeekData(last7);
 
     // Calculate streak
-    const waterGoal = targetData?.water ? Number(targetData.water) : 2500;
+    const waterGoal = waterGoalVal;
     let s = 0;
     if (logsData) {
       const logMap = new Map(logsData.map((l) => [l.logged_date, Number(l.daily_total)]));
@@ -179,7 +202,13 @@ export default function Water() {
     if (!user) return;
     const val = parseInt(goalInput);
     if (isNaN(val) || val <= 0) return;
-    await supabase.from("targets").update({ water: val }).eq("user_id", user.id);
+    const { error } = await supabase
+      .from("targets")
+      .upsert({ user_id: user.id, water: val }, { onConflict: "user_id" });
+    if (error) {
+      toast({ title: "Couldn't update goal", description: error.message, variant: "destructive" });
+      return;
+    }
     setGoal(val);
     setEditingGoal(false);
     toast({ title: "Water goal updated" });
