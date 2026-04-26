@@ -164,11 +164,40 @@ export default function Nutrition() {
     if (!searchQuery.trim()) return;
     setSearching(true);
     try {
-      const res = await fetch(
-        `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(searchQuery)}&search_simple=1&action=process&json=1&page_size=10`
-      );
+      const q = encodeURIComponent(searchQuery);
+      // Primary: world DB sorted by popularity (most-scanned first)
+      const primaryUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20&sort_by=unique_scans_n`;
+      const res = await fetch(primaryUrl);
       const data = await res.json();
-      setSearchResults(data.products || []);
+      let products: FoodResult[] = data.products || [];
+
+      // Fallback 1: widen world search (no sort) if too few results
+      if (products.length < 3) {
+        try {
+          const wideRes = await fetch(
+            `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
+          );
+          const wideData = await wideRes.json();
+          const extra: FoodResult[] = wideData.products || [];
+          const seen = new Set(products.map((p) => p.product_name));
+          for (const p of extra) {
+            if (!seen.has(p.product_name)) products.push(p);
+          }
+        } catch { /* ignore fallback errors */ }
+      }
+
+      // Fallback 2: try the India-specific DB if still nothing (great for Indian foods)
+      if (products.length === 0) {
+        try {
+          const inRes = await fetch(
+            `https://in.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
+          );
+          const inData = await inRes.json();
+          products = inData.products || [];
+        } catch { /* ignore fallback errors */ }
+      }
+
+      setSearchResults(products);
     } catch {
       toast({ title: "Search failed", description: "Could not reach food database.", variant: "destructive" });
     }
