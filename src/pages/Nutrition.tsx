@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
+import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3, Loader2 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { recordLog } from "@/hooks/useBadges";
@@ -163,18 +163,41 @@ export default function Nutrition() {
   const searchFood = async () => {
     if (!searchQuery.trim()) return;
     setSearching(true);
+    const q = encodeURIComponent(searchQuery);
+
+    // Fetch helper with 15s timeout + up to 3 retries (500ms delay between attempts)
+    const fetchWithRetry = async (url: string, retries = 3): Promise<Response> => {
+      let lastErr: unknown;
+      for (let attempt = 1; attempt <= retries; attempt++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        try {
+          const res = await fetch(url, { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res;
+        } catch (err) {
+          clearTimeout(timeoutId);
+          lastErr = err;
+          if (attempt < retries) {
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+      }
+      throw lastErr;
+    };
+
     try {
-      const q = encodeURIComponent(searchQuery);
       // Primary: world DB sorted by popularity (most-scanned first)
       const primaryUrl = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20&sort_by=unique_scans_n`;
-      const res = await fetch(primaryUrl);
+      const res = await fetchWithRetry(primaryUrl);
       const data = await res.json();
       let products: FoodResult[] = data.products || [];
 
       // Fallback 1: widen world search (no sort) if too few results
       if (products.length < 3) {
         try {
-          const wideRes = await fetch(
+          const wideRes = await fetchWithRetry(
             `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
           );
           const wideData = await wideRes.json();
@@ -189,7 +212,7 @@ export default function Nutrition() {
       // Fallback 2: try the India-specific DB if still nothing (great for Indian foods)
       if (products.length === 0) {
         try {
-          const inRes = await fetch(
+          const inRes = await fetchWithRetry(
             `https://in.openfoodfacts.org/cgi/search.pl?search_terms=${q}&search_simple=1&action=process&json=1&page_size=20`
           );
           const inData = await inRes.json();
@@ -199,7 +222,11 @@ export default function Nutrition() {
 
       setSearchResults(products);
     } catch {
-      toast({ title: "Search failed", description: "Could not reach food database.", variant: "destructive" });
+      toast({
+        title: "Search failed",
+        description: "Food database is slow right now. Please try again in a moment.",
+        variant: "destructive",
+      });
     }
     setSearching(false);
   };
@@ -440,13 +467,19 @@ export default function Nutrition() {
                   onKeyDown={(e) => e.key === "Enter" && searchFood()}
                 />
                 <Button onClick={searchFood} disabled={searching}>
-                  {searching ? "..." : "Search"}
+                  {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => { setShowSearch(false); setSearchResults([]); setSearchQuery(""); }}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              {searchResults.length > 0 && (
+              {searching && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Searching food database...</span>
+                </div>
+              )}
+              {!searching && searchResults.length > 0 && (
                 <div className="border border-border rounded-lg max-h-60 overflow-y-auto divide-y divide-border">
                   {searchResults
                     .filter((food) => food.nutriments && food.product_name)
