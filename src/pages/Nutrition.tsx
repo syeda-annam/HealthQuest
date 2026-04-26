@@ -10,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3 } from "lucide-react";
+import { Search, Plus, Trash2, UtensilsCrossed, X, Edit3, Loader2 } from "lucide-react";
 import { format, subDays, startOfWeek, endOfWeek, subWeeks } from "date-fns";
 import { updateGoalsForModule } from "@/hooks/useGoalProgress";
 import { recordLog } from "@/hooks/useBadges";
@@ -467,13 +467,19 @@ export default function Nutrition() {
                   onKeyDown={(e) => e.key === "Enter" && searchFood()}
                 />
                 <Button onClick={searchFood} disabled={searching}>
-                  {searching ? "..." : "Search"}
+                  {searching ? <Loader2 className="h-4 w-4 animate-spin" /> : "Search"}
                 </Button>
                 <Button variant="ghost" size="icon" onClick={() => { setShowSearch(false); setSearchResults([]); setSearchQuery(""); }}>
                   <X className="h-4 w-4" />
                 </Button>
               </div>
-              {searchResults.length > 0 && (
+              {searching && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground py-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <span>Searching food database...</span>
+                </div>
+              )}
+              {!searching && searchResults.length > 0 && (
                 <div className="border border-border rounded-lg max-h-60 overflow-y-auto divide-y divide-border">
                   {searchResults
                     .filter((food) => food.nutriments && food.product_name)
