@@ -97,7 +97,7 @@ export default function Onboarding() {
       }
 
       toast.success("Welcome to HealthQuest!");
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       toast.error(err.message);
     } finally {
