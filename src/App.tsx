@@ -6,11 +6,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ProfileProvider } from "@/contexts/ProfileContext";
 import { initTheme } from "@/lib/theme";
-import Index from "./pages/Index";
+import Landing from "./pages/Landing";
+import Dashboard from "./pages/Dashboard";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import NotFound from "./pages/NotFound";
-import { DashboardLayout } from "@/components/DashboardLayout";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import Water from "./pages/Water";
 import Sleep from "./pages/Sleep";
@@ -37,7 +38,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Landing />} />
+            <Route path="/dashboard" element={<DashboardLayout><Dashboard /></DashboardLayout>} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/workouts" element={<DashboardLayout><Workouts /></DashboardLayout>} />
