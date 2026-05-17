@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const MODULES = [
-  { name: "Workouts", icon: Dumbbell, desc: "Strength, cardio & PRs" },
+  { name: "Workouts", icon: Dumbbell, desc: "Strength, cardio & Muscle Balance" },
   { name: "Nutrition", icon: UtensilsCrossed, desc: "Macros & meals" },
   { name: "Sleep", icon: Moon, desc: "Duration & quality" },
   { name: "Water", icon: Droplets, desc: "Hydration goals" },
